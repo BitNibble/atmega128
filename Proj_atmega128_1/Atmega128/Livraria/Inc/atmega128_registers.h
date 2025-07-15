@@ -35,7 +35,7 @@ typedef union {
 } U_word;
 
 /*****************************/
-/*****      REGISTER      ****/
+/*****     REGISTER       ****/
 /*****************************/
 // PINF 0x20 (U_byte)
 // PINE 0x21 (U_byte)

@@ -19,7 +19,7 @@ Comment:
 ************************************************************************/
 /*** Working Frequency ***/
 #define F_CPU 16000000UL
-/*** ibrary ***/
+/*** Library ***/
 #include "atmega128usart1.h"
 #include "function.h"
 #include "lcd2p.h"

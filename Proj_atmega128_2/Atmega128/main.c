@@ -48,7 +48,7 @@ Comment:
 #define SMIN -200
 #define SMAX +200
 
-/*** variable ***/
+/*** Variable ***/
 struct time tm; // time struct RTC
 struct date dt; // date struct RTC
 

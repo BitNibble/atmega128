@@ -99,7 +99,7 @@ typedef struct {
 	/***ADC***/
 	Atmega128AnalogToDigitalConverter_TypeDef* adc_reg;
 	#ifdef _ANALOG_MODULE_
-		void (*adc_enable)( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... );
+		void (*adc_enable)( uint8_t Vreff, uint8_t Divfactor, uint8_t n_channel, ... );
 	#endif
 	/***BOOTLOAD***/
 	Atmega128BootLoader_TypeDef* bootload_reg;

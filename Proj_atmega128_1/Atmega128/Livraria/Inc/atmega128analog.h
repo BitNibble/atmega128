@@ -33,10 +33,10 @@ typedef struct{
 	analogparameter par;
 	// prototype pointers
 	int (*read)(int selection);
-}ADC0;
+}ADC0_Handler;
 
-void adc_enable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... );
-ADC0* adc(void);
+void adc_enable( uint8_t Vreff, uint8_t Divfactor, uint8_t n_channel, ... );
+ADC0_Handler* adc(void);
 
 #endif
 /*** EOF ***/

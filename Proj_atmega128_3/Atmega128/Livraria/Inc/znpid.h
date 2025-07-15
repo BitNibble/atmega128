@@ -1,12 +1,12 @@
 /************************************************************************
-	ZNPID
+	ZNPID – Ziglor and Nichol PID Controller
 Author:   <sergio.salazar.santos@gmail.com>
 License:  GNU General Public License
-Hardware: Atmega 128
+Hardware: Atmega128
 Date:     17022021_start
 ************************************************************************/
 #ifndef _ZNPID_H_
-	#define _ZNPID_H_
+#define _ZNPID_H_
 
 /*** Library ***/
 #include <inttypes.h>
@@ -17,33 +17,32 @@ Date:     17022021_start
 
 /*** Parameter ***/
 typedef struct {
-	double kc; // constant p
-	double ki; // constant i
-	double kd; // constant d
-	double SetPoint; // desired output
-	double Err_past; // Last Error reading
-	double dy; // difference error y axis points.
-	double dx; // difference time x axis points.
-	double integral; // progression
-	double derivative; // rate of growth (tangent), or derivative
-	double PV; // output feedback
-	double OP; // output signal
-}znpid_parameter;
+	double kc;           // Proportional gain
+	double ki;           // Integral gain
+	double kd;           // Derivative gain
+	double SetPoint;     // Desired target value
+	double Err_past;     // Previous error
+	double dy;           // Error difference (current - previous)
+	double dx;           // Time difference (delta t)
+	double integral;     // Integrated error (I term)
+	double derivative;   // Derivative of error (D term)
+	double PV;           // Process variable (measured value)
+	double OP;           // Output signal
+} ZNPID_Parameter;
 
 /*** Handler ***/
-typedef struct{
-	znpid_parameter par;
-	
-	// V-table
-	void (*set_kc)(znpid_parameter* par, double kc);
-	void (*set_ki)(znpid_parameter* par, double ki);
-	void (*set_kd)(znpid_parameter* par, double kd);
-	void (*set_SP)(znpid_parameter* par, double setpoint);
-	double (*output)(znpid_parameter* par, double PV, double timelapse);
-}ZNPID;
+typedef struct {
+	ZNPID_Parameter par;
 
-ZNPID znpid_enable(void);
+	// Function pointer table (v-table)
+	void (*set_kc)(ZNPID_Parameter* par, double kc);
+	void (*set_ki)(ZNPID_Parameter* par, double ki);
+	void (*set_kd)(ZNPID_Parameter* par, double kd);
+	void (*set_SP)(ZNPID_Parameter* par, double setpoint);
+	double (*output)(ZNPID_Parameter* par, double PV, double timelapse);
+} ZNPID_Handler;
+
+ZNPID_Handler znpid_enable(void);
 
 #endif
 /*** EOF ***/
-

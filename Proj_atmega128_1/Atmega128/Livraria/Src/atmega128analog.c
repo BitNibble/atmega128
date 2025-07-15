@@ -22,20 +22,21 @@ static volatile unsigned char adc_n_sample;
 int ANALOG_read(int selection);
 
 /*** Internal State ***/
-static ADC0 atmega128_adc = {
+static ADC0_Handler atmega128_adc = {
 	// V-table
 	.read = ANALOG_read	
 };
 
 /*** Handler ***/
-void adc_enable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
+void adc_enable( uint8_t Vreff, uint8_t Divfactor, uint8_t n_channel, ... )
 // Interrupt running mode setup, and list of channels to be probed
 {
 	// LOCAL VARIABLES
 	va_list list;
 	int i;
 	// Initialize variables
-	ADC_N_CHANNEL = (n_channel & MUX_MASK);
+	if (n_channel > 0 && n_channel < MAX_CHANNEL) ADC_N_CHANNEL = n_channel;
+	else ADC_N_CHANNEL = 1;
 	ADC_SELECTOR = 0;
 	adc_n_sample = 0;
 	
@@ -133,7 +134,7 @@ void adc_enable( uint8_t Vreff, uint8_t Divfactor, int n_channel, ... )
 	cpu_reg()->sreg.var |= (1 << 7);
 }
 
-ADC0* adc(void){ return &atmega128_adc; }
+ADC0_Handler* adc(void){ return &atmega128_adc; }
 
 /*** Procedure and Function definition ***/
 int ANALOG_read(int selection)
