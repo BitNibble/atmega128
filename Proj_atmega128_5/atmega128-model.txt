@@ -1,0 +1,2 @@
+Project 2 of atmega 128 is the basis model for all microcontrollers, follow the same syntax.
+

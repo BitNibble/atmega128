@@ -1,0 +1,16 @@
+﻿------ Clean started: Project: Atmega128, Configuration: Debug AVR ------
+Build started.
+Project "Atmega128.cproj" (Clean target(s)):
+Target "Clean" in file "C:\Program Files (x86)\Atmel\Studio\7.0\Vs\Compiler.targets" from project "D:\Embedded\Atmega_128\Proj_atmega128_1\Atmega128\Atmega128.cproj" (entry point):
+	Task "RunCompilerTask"
+		Shell Utils Path C:\Program Files (x86)\Atmel\Studio\7.0\shellUtils
+		C:\Program Files (x86)\Atmel\Studio\7.0\shellUtils\make.exe clean 
+		rm -rf  Livraria/Src/74hc595.o Livraria/Src/atmega128.o Livraria/Src/atmega128analog.o Livraria/Src/atmega128interrupt.o Livraria/Src/atmega128mapping.o Livraria/Src/atmega128spi.o Livraria/Src/atmega128timer0.o Livraria/Src/atmega128timer1.o Livraria/Src/atmega128timer2.o Livraria/Src/atmega128timer3.o Livraria/Src/atmega128twi.o Livraria/Src/atmega128usart0.o Livraria/Src/atmega128usart1.o Livraria/Src/atmegaeeprom.o Livraria/Src/bt05atcommands.o Livraria/Src/buffer.o Livraria/Src/clock.o Livraria/Src/esp01atcommands.o Livraria/Src/explode.o Livraria/Src/function.o Livraria/Src/hc05atcommands.o Livraria/Src/hc42atcommands.o Livraria/Src/hx711.o Livraria/Src/keypad.o Livraria/Src/lcd.o Livraria/Src/lcd2p.o Livraria/Src/lfsm.o Livraria/Src/mm74c923.o Livraria/Src/pcf8563rtc.o Livraria/Src/rotenc.o Livraria/Src/watch.o Livraria/Src/znpid.o main.o   
+		rm -rf  Livraria/Src/74hc595.d Livraria/Src/atmega128.d Livraria/Src/atmega128analog.d Livraria/Src/atmega128interrupt.d Livraria/Src/atmega128mapping.d Livraria/Src/atmega128spi.d Livraria/Src/atmega128timer0.d Livraria/Src/atmega128timer1.d Livraria/Src/atmega128timer2.d Livraria/Src/atmega128timer3.d Livraria/Src/atmega128twi.d Livraria/Src/atmega128usart0.d Livraria/Src/atmega128usart1.d Livraria/Src/atmegaeeprom.d Livraria/Src/bt05atcommands.d Livraria/Src/buffer.d Livraria/Src/clock.d Livraria/Src/esp01atcommands.d Livraria/Src/explode.d Livraria/Src/function.d Livraria/Src/hc05atcommands.d Livraria/Src/hc42atcommands.d Livraria/Src/hx711.d Livraria/Src/keypad.d Livraria/Src/lcd.d Livraria/Src/lcd2p.d Livraria/Src/lfsm.d Livraria/Src/mm74c923.d Livraria/Src/pcf8563rtc.d Livraria/Src/rotenc.d Livraria/Src/watch.d Livraria/Src/znpid.d main.d   
+		rm -rf "Atmega128.elf" "Atmega128.a" "Atmega128.hex" "Atmega128.lss" "Atmega128.eep" "Atmega128.map" "Atmega128.srec" "Atmega128.usersignatures"
+	Done executing task "RunCompilerTask".
+Done building target "Clean" in project "Atmega128.cproj".
+Done building project "Atmega128.cproj".
+
+Build succeeded.
+========== Clean: 1 succeeded, 0 failed, 0 skipped ==========
