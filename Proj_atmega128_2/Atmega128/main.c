@@ -23,6 +23,7 @@ Comment:
 ************************************************************************/
 /*** Working Frequency ***/
 #define F_CPU 16000000UL
+
 /*** Library ***/
 #include "atmega128analog.h"
 #include "atmega128timer0.h"
@@ -612,7 +613,6 @@ void PORTINIT(void)
 	gpioc_reg()->port.var = 0x00;
 }
 
-/*** File Interrupt ***/
 void timer0_comp_vect(void) // 1Hz and usart Tx
 {
 	uint8_t Sreg;

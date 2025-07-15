@@ -13,9 +13,8 @@ Comment:
 ************************************************************************/
 /*** Working Frequency ***/
 #define F_CPU 16000000UL
-/*
-** library
-*/
+
+/*** Library ***/
 #include "atmega128mapping.h"
 #include "function.h"
 #include "lcd.h"
@@ -28,17 +27,14 @@ Comment:
 #include <stdio.h> //sprintf
 #include <string.h>
 
-/*
-** Constant and Macro
-*/
+/*** Constant and Macro ***/
 #define TRUE 1
 #define ZERO 0
 #define Min 500     // 450 PWM servo motor
 #define Max 2350    // 2450 PWM servo motor
 #define repeat 59
-/*
-** Global File variable
-*/
+
+/*** Variable ***/
 HC595 shift;
 ZNPID pid_1;
 ZNPID pid_2;
@@ -48,14 +44,13 @@ char* ptr=NULL; // pointing to analog reading string
 uint16_t adcvalue; // analog reading
 float pid_out_1;
 float pid_out_2;
-int32_t tmp; 
-/*
-** Header
-*/
+int32_t tmp;
+
+/*** Procedure and Function declaration ***/
 void timer0_comp_vect(void);
 void PORTINIT();
 
-/****MAIN****/
+/**** HANDLER ****/
 int main(void)
 {
 PORTINIT(); // Inic Ports
@@ -194,9 +189,8 @@ switch(Menu){
 		break;
 };
 }}
-/*
-** procedure and function
-*/
+
+/*** Procedure and Function definition ***/
 void PORTINIT(void)
 {
 	//INPUT
@@ -205,9 +199,7 @@ void PORTINIT(void)
 	//OUTPUT
 	DDRB|=(1<<5) | (1<<6) | (1<<7);
 }
-/*
-** interrupt
-*/
+
 void timer0_comp_vect(void) // 1Hz and usart Tx
 {
 	uint8_t Sreg;
@@ -230,8 +222,8 @@ void timer0_comp_vect(void) // 1Hz and usart Tx
 		count++;
 	SREG = Sreg;
 }
-/***EOF***/
-/**** Comment:
-note: not defining interrupt function, or initializing an object will block the program.
-****/
+
+/*** EOF ***/
+
+
 

@@ -21,9 +21,8 @@ Comment:
 ************************************************************************/
 /*** Working Frequency ***/
 #define F_CPU 16000000UL
-/*
-** File library
-*/
+
+/*** Library ***/
 #include "atmega128timer0.h"
 #include "atmegaeeprom.h"
 #include "atmega128timer1.h"
@@ -34,6 +33,7 @@ Comment:
 #include "hx711.h"
 #include <string.h>
 
+/*** Constant & Macro***/
 #define ZERO 0
 #define ONE 1
 #define TRUE 1
@@ -44,9 +44,8 @@ Comment:
 #define _10sec 10
 #define minDIV 1
 #define maxDIV 255
-/*
-** File variable
-*/
+
+/*** Variable ***/
 EXPLODE F;
 //INTERRUPT intx;
 HX711_calibration HX711_data;
@@ -62,11 +61,12 @@ uint8_t SiGnal = ZERO;
 uint8_t count=blink;
 uint16_t divfactor;
 
+/*** Procedure and Function declaration ***/
 void timer0_comp_vect(void);
 void timer1_compa_vect(void);
 void PORTINIT();
 
-/****MAIN****/
+/**** HANDLER ****/
 int main(void)
 {
 PORTINIT();
@@ -278,9 +278,8 @@ switch(Menu){
 		
 };
 }}
-/*
-** procedure and function
-*/
+
+/*** Procedure and Function definition ***/
 void PORTINIT(void)
 {
 	//Control buttons
@@ -289,9 +288,7 @@ void PORTINIT(void)
 	DDRC = 0xFF;
 	PORTC = 0xFF;
 }
-/*
-** interrupt
-*/
+
 void timer0_comp_vect(void) // 15.4 us intervals
 {
 	/***Block other interrupts during this procedure***/
@@ -341,10 +338,6 @@ void timer1_compa_vect(void) // 1 second intervals
 	}
 	/***CAL DIVFACTOR DEFINE END***/
 }
-/***EOF***/
-/**** Comment:
-1º Sequence
-2º Scope
-note: not defining interrupt function, or initializing an object will block the program.
-****/
+
+/*** EOF ***/
 

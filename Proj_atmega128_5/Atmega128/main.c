@@ -19,7 +19,7 @@ Comment:
 ************************************************************************/
 /*** Working Frequency ***/
 #define F_CPU 16000000UL
-/*** File library ***/
+/*** ibrary ***/
 #include "atmega128usart1.h"
 #include "function.h"
 #include "lcd2p.h"
@@ -28,7 +28,7 @@ Comment:
 #include "pcf8575.h"
 #include <string.h>
 
-/*** File Constant & Macro ***/
+/*** Constant & Macro ***/
 #define TRUE 1
 #define ZERO 0
 #define Min 500     // 450 PWM servo motor
@@ -36,14 +36,14 @@ Comment:
 #define SMIN -200
 #define SMAX +200
 
-/*** File variable ***/
+/*** Variable ***/
 struct time tm; // time struct RTC
 struct date dt; // date struct RTC
 
 PCF8563RTC rtc;
 char* uartreceive = NULL; // capture
 
-/**** Procedure & Function ****/
+/**** Handler ****/
 int main(void)
 {
 usart1_enable(38400,8,1,NONE); // UART 103 para 9600 (ESP01), 68 para 14400, 25 para 38400 (HC05), 8 para 115200

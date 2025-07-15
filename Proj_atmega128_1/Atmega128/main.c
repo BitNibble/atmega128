@@ -16,7 +16,8 @@ Comment:
 **********************************************************/
 /*** Working Frequency ***/
 #define F_CPU 16000000UL
-/*** library ***/
+
+/*** Library ***/
 #include "atmega128mapping.h"
 #include "lcd.h"
 #include "function.h"
@@ -26,11 +27,14 @@ Comment:
 
 /*** Constant & Macro ***/
 #define True 1
-/*** Global File Variable ***/
+
+/*** Variable ***/
 char* string=NULL;
-/*** Header ***/
+
+/*** Procedure and Function declaration ***/
 void PORTINIT(void);
-/*** MAIN***MAIN ***/
+
+/*** HANDLER ***/
 int main(void)
 {
 PORTINIT();
@@ -295,7 +299,8 @@ lcd0()->string_size(string,4);
 //shift.byte(lfsm.getoutput(&lfsm));
 PORTC=~lfsm.getoutput(&lfsm);
 }}
-/*** Procedure & Function ***/
+
+/*** Procedure and Function declaration ***/
 void PORTINIT(void)
 {
 	DDRB=0X00; // Buttons
@@ -303,7 +308,10 @@ void PORTINIT(void)
 	DDRC=0XFF; // Led
 	PORTC=0X00; // Led OFF
 }
-/*** Interrupt ***/
+
+/*** EOF ***/
+
+
 /***Comment
 1º Sequence
 2º Scope
@@ -311,5 +319,6 @@ void PORTINIT(void)
 4º Casting
 note: not defining interrupt function, or initializing an object will block the program.
 ***/
-/***EOF***/
+
+
 
