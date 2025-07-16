@@ -37,6 +37,7 @@ void adc_enable( uint8_t Vreff, uint8_t Divfactor, uint8_t n_channel, ... )
 	// Initialize variables
 	if (n_channel > 0 && n_channel < MAX_CHANNEL) ADC_N_CHANNEL = n_channel;
 	else ADC_N_CHANNEL = 1;
+	
 	ADC_SELECTOR = 0;
 	adc_n_sample = 0;
 	

@@ -24,21 +24,21 @@ Date:     14/07/2025
 typedef struct {
 	void (*comp_vect)(void);
 	void (*ovf_vect)(void);
-}TC2_callback;
+}TC2_Callback;
 
 /*** Handler ***/
 typedef struct{
-	TC2_callback callback;
+	TC2_Callback callback;
 	
 	// V-table
 	void (*compoutmode)(unsigned char compoutmode);
 	void (*compare)(unsigned char compare);
 	uint8_t (*start)(unsigned int prescaler);
 	uint8_t (*stop)(void);
-}TC2;
+}TC2_Handler;
 
 void tc2_enable(unsigned char wavegenmode, unsigned char interrupt);
-TC2* tc2(void);
+TC2_Handler* tc2(void);
 
 #endif
 /*** EOF ***/

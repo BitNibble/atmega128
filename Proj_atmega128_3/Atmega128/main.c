@@ -46,12 +46,12 @@ Comment:
 #define maxDIV 255
 
 /*** Variable ***/
-EXPLODE F;
+EXPLODE_Handler F;
 //INTERRUPT intx;
-HX711_calibration HX711_data;
-HX711_calibration* HX711_ptr;
-const uint8_t sizeblock = sizeof(HX711_calibration);
-HX711 hx;
+HX711_Calibration HX711_data;
+HX711_Calibration* HX711_ptr;
+const uint8_t sizeblock = sizeof(HX711_Calibration);
+HX711_Handler hx;
 float tmp;
 char result[32];
 char Menu = '1'; // Main menu selector

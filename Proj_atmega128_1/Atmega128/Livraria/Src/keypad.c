@@ -12,19 +12,19 @@ Date    09/01/2024
 #include <stdarg.h>
 
 /*** Variable ***/
-static KEYPAD setup_keypad;
+static KEYPAD_Handler setup_keypad;
 volatile uint8_t *keypad_DDR;
 volatile uint8_t *keypad_PIN;
 volatile uint8_t *keypad_PORT;
 
-struct keydata{
+struct KEYPAD_Row{
 	uint8_t line_1;
 	uint8_t line_2;
 	uint8_t line_3;
 	uint8_t line_4;
 }keypad_datai, keypad_dataf;
 
-char keypadvalue[KEYPADLINES][KEYPADCOLUMNS] =
+char KEYPAD_Value[KEYPADLINES][KEYPADCOLUMNS] =
 {
 	{'1', '2', '3', 'A'},
 	{'4', '5', '6', 'B'},
@@ -33,10 +33,10 @@ char keypadvalue[KEYPADLINES][KEYPADCOLUMNS] =
 };
 
 uint8_t KEYPADSTRINGINDEX;
-char KEYPAD_string[KEYPADSTRINGSIZE + 1];
-static keypadata data;
+char KEYPAD_string[KEYPADSTRINGSIZE + 1] = {0};
+static KEYPAD_Data data;
 
-char endstr[2];
+char endstr[2] = {0};
 // can not assign something outside a function
 
 /*** Procedure and Function declaration ***/
@@ -45,7 +45,7 @@ char KEYPAD_getkey(void);
 // read
 void KEYPAD_read(void);
 // get
-keypadata* KEYPAD_data(void);
+KEYPAD_Data* KEYPAD_data(void);
 // flush
 void KEYPAD_flush(void);
 // lh
@@ -54,7 +54,7 @@ uint8_t KEYPADlh(uint8_t xi, uint8_t xf);
 uint8_t KEYPADhl(uint8_t xi, uint8_t xf);
 
 /*** Handler ***/
-KEYPAD keypad_enable(volatile uint8_t *ddr, volatile uint8_t *pin, volatile uint8_t *port)
+KEYPAD_Handler keypad_enable(volatile uint8_t *ddr, volatile uint8_t *pin, volatile uint8_t *port)
 {
 	// LOCAL VARIABLE
 	data.character = ' ';
@@ -84,7 +84,7 @@ KEYPAD keypad_enable(volatile uint8_t *ddr, volatile uint8_t *pin, volatile uint
 	return setup_keypad;
 }
 
-KEYPAD* keypad(void){ return &setup_keypad; }
+KEYPAD_Handler* keypad(void){ return &setup_keypad; }
 
 /*** Procedure and Function definition ***/
 char KEYPAD_getkey(void)
@@ -104,13 +104,13 @@ char KEYPAD_getkey(void)
 				if(HL){
 					// decode index line one column what ?
 					if(HL == (1 << KEYPADDATA_1))
-						c = keypadvalue[0][0];
+						c = KEYPAD_Value[0][0];
 					if(HL == (1 << KEYPADDATA_2))
-						c = keypadvalue[0][1];
+						c = KEYPAD_Value[0][1];
 					if(HL == (1 << KEYPADDATA_3))
-						c = keypadvalue[0][2];
+						c = KEYPAD_Value[0][2];
 					if(HL == (1 << KEYPADDATA_4))
-						c = keypadvalue[0][3];
+						c = KEYPAD_Value[0][3];
 				}
 				*keypad_DDR &= ~(1 << KEYPADLINE_1);
 				*keypad_PORT |= (1 << KEYPADLINE_1);
@@ -124,13 +124,13 @@ char KEYPAD_getkey(void)
 				if(HL){
 					// decode index line two column what ?
 					if(HL == (1 << KEYPADDATA_1))
-						c = keypadvalue[1][0];
+						c = KEYPAD_Value[1][0];
 					if(HL == (1 << KEYPADDATA_2))
-						c = keypadvalue[1][1];
+						c = KEYPAD_Value[1][1];
 					if(HL == (1 << KEYPADDATA_3))
-						c = keypadvalue[1][2];
+						c = KEYPAD_Value[1][2];
 					if(HL == (1 << KEYPADDATA_4))
-						c = keypadvalue[1][3];
+						c = KEYPAD_Value[1][3];
 				}
 				*keypad_DDR &= ~(1 << KEYPADLINE_2);
 				*keypad_PORT |= (1<<KEYPADLINE_2);
@@ -144,13 +144,13 @@ char KEYPAD_getkey(void)
 				if(HL){
 					// decode index line three column what ?
 					if(HL == (1 << KEYPADDATA_1))
-						c = keypadvalue[2][0];
+						c = KEYPAD_Value[2][0];
 					if(HL == (1 << KEYPADDATA_2))
-						c = keypadvalue[2][1];
+						c = KEYPAD_Value[2][1];
 					if(HL == (1 << KEYPADDATA_3))
-						c = keypadvalue[2][2];
+						c = KEYPAD_Value[2][2];
 					if(HL == (1 << KEYPADDATA_4))
-						c = keypadvalue[2][3];
+						c = KEYPAD_Value[2][3];
 				}
 				*keypad_DDR &= ~(1 << KEYPADLINE_3);
 				*keypad_PORT |= (1 << KEYPADLINE_3);
@@ -164,13 +164,13 @@ char KEYPAD_getkey(void)
 				if(HL){
 					// decode index line four column what ?
 					if(HL == (1 << KEYPADDATA_1))
-						c = keypadvalue[3][0];
+						c = KEYPAD_Value[3][0];
 					if(HL == (1 << KEYPADDATA_2))
-						c = keypadvalue[3][1];
+						c = KEYPAD_Value[3][1];
 					if(HL == (1 << KEYPADDATA_3))
-						c = keypadvalue[3][2];
+						c = KEYPAD_Value[3][2];
 					if(HL == (1 << KEYPADDATA_4))
-						c = keypadvalue[3][3];
+						c = KEYPAD_Value[3][3];
 				}
 				*keypad_DDR &= ~(1 << KEYPADLINE_4);
 				*keypad_PORT |= (1 << KEYPADLINE_4);
@@ -212,7 +212,7 @@ void KEYPAD_read(void)
 	}
 }
 // read
-keypadata* KEYPAD_data(void)
+KEYPAD_Data* KEYPAD_data(void)
 {
 	return &data;
 }

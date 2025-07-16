@@ -27,17 +27,17 @@ void PCF8563RTC_SetDay(uint8_t var_day_u8);
 void PCF8563RTC_SetWeekday(uint8_t var_weekday_u8);
 void PCF8563RTC_SetMonth(uint8_t var_month_u8);
 void PCF8563RTC_SetYear(uint8_t var_year_u8);
-struct time PCF8563RTC_GetTime(void);
-struct date PCF8563RTC_GetDate(void);
+PCF8563RTC_Time PCF8563RTC_GetTime(void);
+PCF8563RTC_Date PCF8563RTC_GetDate(void);
 uint8_t PCF8563RTC_bcd2dec(uint8_t num);
 uint8_t PCF8563RTC_bintobcd(uint8_t bin);
 
 /*** Handler ***/
-PCF8563RTC pcf8563rtc_enable(uint8_t prescaler)
+PCF8563RTC_Handler pcf8563rtc_enable(uint8_t prescaler)
 {
 	twi_enable('A', prescaler);
 	
-	PCF8563RTC setup_pcf = {
+	PCF8563RTC_Handler setup_pcf = {
 		// V-table
 		.SetTime = PCF8563RTC_SetTime,
 		.SetHour = PCF8563RTC_SetHour,
@@ -157,9 +157,9 @@ void PCF8563RTC_SetDay(uint8_t var_day_u8)
 	twi()->master_write(var_day_u8);			    // Write date on RAM address 05H
 	twi()->stop();									// Stop I2C communication after Setting the Date
 }
-struct time PCF8563RTC_GetTime(void)
+PCF8563RTC_Time PCF8563RTC_GetTime(void)
 {
-	struct time result;
+	PCF8563RTC_Time result;
 	twi()->start();									    		// Start I2C communication
 	twi()->connect(PCF8563, TWI_WRITE);					    	// connect to PCF8563 by sending its ID on I2c Bus
 	twi()->master_write(PCF8563SecondRegAddress_U8);			// Request Sec RAM address at 00H
@@ -172,9 +172,9 @@ struct time PCF8563RTC_GetTime(void)
 	twi()->stop();												// Stop I2C communication after reading the Time
 	return result;
 }
-struct date PCF8563RTC_GetDate(void)
+PCF8563RTC_Date PCF8563RTC_GetDate(void)
 {
-	struct date result;
+	PCF8563RTC_Date result;
 	twi()->start();												    // Start I2C communication
 	twi()->connect(PCF8563, TWI_WRITE);							    // connect to PCF8563 by sending its ID on I2c Bus
 	twi()->master_write(PCF8563DayRegAddress_U8);					// Request DAY RAM address at 04H

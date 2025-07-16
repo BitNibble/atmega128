@@ -10,7 +10,7 @@ Date:     08032021_start
 #include <avr/io.h>
 
 /*** Variable ***/
-HX711_calibration HX711_Default_50Kg = {
+HX711_Calibration HX711_Default_50Kg = {
 	.offset_32 = 35800,
 	.offset_64 = 71600,
 	.offset_128 = 143200,
@@ -28,25 +28,25 @@ uint8_t hx711_clkpin;
 int32_t* ptr;
 
 /*** Procedure and Function declaration ***/
-uint8_t HX711_get_amplify(HX711* self);
-void HX711_reset_readflag(HX711* self);
+uint8_t HX711_get_amplify(HX711_Handler* self);
+void HX711_reset_readflag(HX711_Handler* self);
 uint8_t HX711_read_bit(void);
-void HX711_set_amplify(HX711* self, uint8_t amplify);
-uint8_t HX711_query(HX711* self);
-int32_t HX711_read_raw(HX711* self);
-float HX711_raw_average(HX711* self, uint8_t n);
-uint8_t HX711_get_readflag(HX711* self);
-HX711_calibration* HX711_get_cal(HX711* self);
+void HX711_set_amplify(HX711_Handler* self, uint8_t amplify);
+uint8_t HX711_query(HX711_Handler* self);
+int32_t HX711_read_raw(HX711_Handler* self);
+float HX711_raw_average(HX711_Handler* self, uint8_t n);
+uint8_t HX711_get_readflag(HX711_Handler* self);
+HX711_Calibration* HX711_get_cal(HX711_Handler* self);
 
 /*** Handler ***/
-HX711 hx711_enable(volatile uint8_t *ddr, volatile uint8_t *pin, volatile uint8_t *port, uint8_t datapin, uint8_t clkpin)
+HX711_Handler hx711_enable(volatile uint8_t *ddr, volatile uint8_t *pin, volatile uint8_t *port, uint8_t datapin, uint8_t clkpin)
 {
 	//LOCAL VARIABLES
 	uint8_t tSREG;
 	tSREG = STATUS_instanceISTER;
 	STATUS_instanceISTER &= ~(1<<7);
 	
-	HX711 setup_hx711;
+	HX711_Handler setup_hx711;
 	
 	//import parameters
 	hx711_DDR = ddr;
@@ -96,11 +96,11 @@ HX711 hx711_enable(volatile uint8_t *ddr, volatile uint8_t *pin, volatile uint8_
 }
 
 /*** Procedure and Function definition ***/
-uint8_t HX711_get_amplify(HX711* self)
+uint8_t HX711_get_amplify(HX711_Handler* self)
 {
 	return self->amplify;
 }
-void HX711_reset_readflag(HX711* self)
+void HX711_reset_readflag(HX711_Handler* self)
 {
 	self->readflag=OFF;
 }
@@ -116,7 +116,7 @@ uint8_t HX711_read_bit(void)
 }
 // Gain selector
 // AVDD connected to 5V, channel B gain=32
-void HX711_set_amplify(HX711* self, uint8_t amplify)
+void HX711_set_amplify(HX711_Handler* self, uint8_t amplify)
 {
 	switch(amplify){
 		case 128:
@@ -137,7 +137,7 @@ void HX711_set_amplify(HX711* self, uint8_t amplify)
 		break;
 	}
 }
-uint8_t HX711_query(HX711* self)
+uint8_t HX711_query(HX711_Handler* self)
 {
 	uint8_t flag=OFF; // one shot
 	if(!self->readflag){
@@ -149,7 +149,7 @@ uint8_t HX711_query(HX711* self)
 	return flag;
 }
 // Function to be used in the interrupt routine with appropriate cycle period.
-int32_t HX711_read_raw(HX711* self)
+int32_t HX711_read_raw(HX711_Handler* self)
 {
 	uint8_t aindex, bindex;
 	int32_t value;
@@ -188,7 +188,7 @@ int32_t HX711_read_raw(HX711* self)
 	}
 	return self->raw_reading;
 }
-float HX711_raw_average(HX711* self, uint8_t n)
+float HX711_raw_average(HX711_Handler* self, uint8_t n)
 {
 	if(self->trigger){
 		if(self->av_n < n){
@@ -205,11 +205,11 @@ float HX711_raw_average(HX711* self, uint8_t n)
 	}
 	return self->raw_mean;
 }
-uint8_t HX711_get_readflag(HX711* self)
+uint8_t HX711_get_readflag(HX711_Handler* self)
 {
 	return self->readflag;
 }
-HX711_calibration* HX711_get_cal(HX711* self)
+HX711_Calibration* HX711_get_cal(HX711_Handler* self)
 {
 	return &(self->cal_data);
 }

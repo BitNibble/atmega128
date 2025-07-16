@@ -27,11 +27,11 @@ typedef struct {
 	void (*compb_vect)(void);
 	void (*compc_vect)(void);
 	void (*ovf_vect)(void);
-}TC3_callback;
+}TC3_Callback;
 
 /*** Handler ***/
 typedef struct{
-	TC3_callback callback;
+	TC3_Callback callback;
 	
 	// V-table
 	void (*compoutmodeA)(unsigned char compoutmode);
@@ -42,10 +42,10 @@ typedef struct{
 	void (*compareC)(uint16_t compareC);
 	uint8_t (*start)(unsigned int prescaler);
 	uint8_t (*stop)(void);
-}TC3;
+}TC3_Handler;
 
 void tc3_enable(unsigned char wavegenmode, unsigned char interrupt);
-TC3* tc3(void);
+TC3_Handler* tc3(void);
 
 #endif
 /*** EOF ***/

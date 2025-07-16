@@ -11,7 +11,7 @@ Date:
 #include "function.h"
 
 /*** Variable ***/
-EXPLODE vari;
+EXPLODE_Handler vari;
 
 volatile uint8_t *mm74c923_DDR;
 volatile uint8_t *mm74c923_PIN;
@@ -25,7 +25,7 @@ char MM74C923_KEY_CODE[]={
 	'4', '5', '6', 'U', '1', '2', '3', 'D', '0', '/', '.', '*', '\0'
 };
 uint8_t MM74C923_KEY_BUFFER_INDEX;
-char MM74C923_KEY_BUFFER[MM74C923_KEY_BUFFER_SIZE + 1];
+char MM74C923_KEY_BUFFER[MM74C923_KEY_BUFFER_SIZE + 1] = {0};
 char MM74C923_KEY_BUFFER_EMPTY[] = "";
 char* MM74C923_pointer;
 
@@ -37,10 +37,10 @@ char* MM74C923_data(void);
 void MM74C923_data_clear(void);
 
 /*** Handler ***/
-MM74C923 mm74c923_enable(volatile uint8_t *ddr, volatile uint8_t *pin, volatile uint8_t *port)
+MM74C923_Handler mm74c923_enable(volatile uint8_t *ddr, volatile uint8_t *pin, volatile uint8_t *port)
 {
 	vari = explode_enable();
-	MM74C923 mm74c923;
+	MM74C923_Handler mm74c923;
 	// import parameters
 	mm74c923_DDR = ddr;
 	mm74c923_PIN = pin;

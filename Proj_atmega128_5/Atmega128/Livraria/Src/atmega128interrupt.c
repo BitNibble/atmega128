@@ -15,7 +15,7 @@ void INTERRUPT_on(uint8_t channel);
 uint8_t INTERRUPT_reset_status(void);
 
 /*** Internal State ***/
-static EXINT0 atmega128_exint = {
+static EXINT0_Handler atmega128_exint = {
 	// V-table
 	.set = INTERRUPT_set,
 	.off = INTERRUPT_off,
@@ -24,7 +24,7 @@ static EXINT0 atmega128_exint = {
 };
 
 /*** Handler ***/
-EXINT0* exint(void){ return &atmega128_exint; }
+EXINT0_Handler* exint(void){ return &atmega128_exint; }
 
 /*** Procedure and Function definition ***/
 uint8_t INTERRUPT_reset_status(void)

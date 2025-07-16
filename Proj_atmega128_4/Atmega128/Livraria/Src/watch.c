@@ -18,7 +18,7 @@ const uint32_t w12_hour_seconds = (W12_HOUR_SECONDS - 1);
 const uint32_t w24_hour_seconds = (W24_HOUR_SECONDS - 1);
 
 /*** Variable ***/
-static WATCH_TIME wtime;
+static WATCH_Time wtime;
 static char WATCH_vector[9] = {0};
 static uint32_t WATCH_trigger[N_DELAY] = {0};
 static uint8_t WATCH_delay_flag[N_DELAY] = {0};
@@ -33,14 +33,14 @@ void WATCH_result(void);
 char* WATCH_show(void);
 
 /*** Handler ***/
-WATCH watch_enable(void)
+WATCH_Handler watch_enable(void)
 {
 	wtime.hour = 0;
 	wtime.minute = 0;
 	wtime.second = 0;
 	wtime.seconds = 0;
 	
-	WATCH watch;
+	WATCH_Handler watch;
 	watch.preset = WATCH_preset;
 	watch.start_delay = WATCH_start_delay;
 	watch.increment = WATCH_increment;

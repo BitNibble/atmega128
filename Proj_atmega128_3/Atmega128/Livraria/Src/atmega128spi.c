@@ -15,7 +15,7 @@ void spi_transmit_sync (uint8_t * dataout, uint8_t len);
 uint8_t spi_fast_shift (uint8_t data);
 
 /*** Internal State ***/
-static SPI0 atmega128_spi = {
+static SPI0_Handler atmega128_spi = {
 	// V-table
 	.transfer_sync = spi_transfer_sync,
 	.transmit_sync = spi_transmit_sync,
@@ -106,7 +106,7 @@ void spi_enable(uint8_t master_slave_select, uint8_t data_order,  uint8_t data_m
 	spi_reg()->spcr.var |= (1 << SPE);
 }
 
-SPI0* spi(void){ return &atmega128_spi; }
+SPI0_Handler* spi(void){ return &atmega128_spi; }
 
 /*** Procedure and Function definition***/
 void spi_default(void)

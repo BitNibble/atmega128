@@ -47,12 +47,13 @@ typedef struct{
 	void (*write)(UARTvar data);
 	void (*putch)(UARTvar c);
 	void (*puts)(UARTvar* s);
-}USART0;
+}USART0_Handler;
 
 void usart0_enable(uint32_t baud, unsigned int FDbits, unsigned int Stopbits, unsigned int Parity );
-USART0* usart0(void);
+USART0_Handler* usart0(void);
 
-char* usart0_messageprint(USART0* uart, char* oneshot, char* msg, const char* endl);
+/*** Procedure and Function declaration ***/
+char* usart0_messageprint(USART0_Handler* uart, char* oneshot, char* msg, const char* endl);
 
 #endif
 /*** EOF ***/

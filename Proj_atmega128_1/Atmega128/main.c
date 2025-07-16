@@ -40,14 +40,14 @@ int main(void)
 PORTINIT();
 uint8_t option=0; // Menu Jumper
 uint8_t input_tmp=0;
-keypadata* keypadinput;
+KEYPAD_Data* keypadinput;
 uint16_t output=0;
 uint16_t mask=0;
 uint8_t page=0;
 uint16_t n;
-KEYPAD keypad = keypad_enable(&DDRE,&PINE,&PORTE);
+KEYPAD_Handler keypad = keypad_enable(&DDRE,&PINE,&PORTE);
 lcd0_enable(&DDRA,&PINA,&PORTA);
-LFSM lfsm = lfsm_enable(eeprom(),363);
+LFSM_Handler lfsm = lfsm_enable(eeprom(),363);
 //HC595 shift = HC595enable(&DDRG,&PORTG,2,0,1);
 /*****************************************************/
 lfsm.setoutput(&lfsm,0);

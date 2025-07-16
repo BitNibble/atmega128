@@ -46,10 +46,10 @@ typedef struct{
 	void (*clear)(void);
 	void (*gotoxy)(unsigned int y, unsigned int x);
 	void (*reboot)(void);
-}PCF8575_LCD0;
+}PCF8575_LCD0_Handler;
 
-PCF8575_LCD0 pcf8575_lcd0_enable( uint8_t pcf8575_id, uint8_t twi_prescaler );
-PCF8575_LCD0* pcf8575_lcd0(void);
+PCF8575_LCD0_Handler pcf8575_lcd0_enable( uint8_t pcf8575_id, uint8_t twi_prescaler );
+PCF8575_LCD0_Handler* pcf8575_lcd0(void);
 
 #endif
 /*** EOF ***/

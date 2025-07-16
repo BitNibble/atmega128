@@ -15,7 +15,7 @@ uint8_t TIMER_COUNTER2_start(unsigned int prescaler);
 uint8_t TIMER_COUNTER2_stop(void);
 
 /*** Internal State ***/
-static TC2 atmega128_tc2 = {
+static TC2_Handler atmega128_tc2 = {
 	// Callback
 	.callback = {
 		.comp_vect = NULL,
@@ -76,7 +76,7 @@ void tc2_enable(unsigned char wavegenmode, unsigned char interrupt)
 	tc2_reg()->ocr2.var = ~0;
 }
 
-TC2* tc2(void){ return &atmega128_tc2; }
+TC2_Handler* tc2(void){ return &atmega128_tc2; }
 
 /*** Procedure and Function definition ***/
 uint8_t TIMER_COUNTER2_start(unsigned int prescaler)

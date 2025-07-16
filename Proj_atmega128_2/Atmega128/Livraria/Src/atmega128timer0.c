@@ -15,7 +15,7 @@ uint8_t TIMER_COUNTER0_start(unsigned int prescaler);
 uint8_t TIMER_COUNTER0_stop(void);
 
 /*** Internal State ***/
-static TC0 atmega128_tc0 = {
+static TC0_Handler atmega128_tc0 = {
 	// Callback
 	.callback = {
 		.comp_vect = NULL,
@@ -82,7 +82,7 @@ void tc0_enable(unsigned char wavegenmode, unsigned char interrupt)
 	tc0_reg()->ocr0.var = 0xFF;
 }
 
-TC0* tc0(void) {
+TC0_Handler* tc0(void) {
 	return &atmega128_tc0;
 }
 

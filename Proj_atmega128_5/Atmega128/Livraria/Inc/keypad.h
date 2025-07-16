@@ -32,20 +32,20 @@ typedef struct {
 	char character;
 	char* print;
 	char* string;
-}keypadata;
+}KEYPAD_Data;
 
 /*** Handler ***/
 typedef struct{
-	keypadata* data;
+	KEYPAD_Data* data;
 	
 	// V-table
 	char (*getkey)(void);
 	void (*read)(void);
 	void (*flush)(void);
-}KEYPAD;
+}KEYPAD_Handler;
 
-KEYPAD keypad_enable(volatile uint8_t *ddr, volatile uint8_t *pin, volatile uint8_t *port);
-KEYPAD* keypad(void);
+KEYPAD_Handler keypad_enable(volatile uint8_t *ddr, volatile uint8_t *pin, volatile uint8_t *port);
+KEYPAD_Handler* keypad(void);
 
 #endif
 /*** EOF ***/

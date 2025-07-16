@@ -33,9 +33,9 @@ typedef struct{
 	uint8_t divfactor_64; // interval B
 	uint8_t divfactor_128; // interval B
 	uint8_t status;
-}HX711_calibration;
+}HX711_Calibration;
 
-HX711_calibration* HX711_Default;
+HX711_Calibration* HX711_Default;
 
 /*** Handler ***/
 struct model_hx711{
@@ -50,7 +50,8 @@ struct model_hx711{
 	int32_t sum;
 	uint8_t av_n;
 	float raw_mean;
-	HX711_calibration cal_data;
+	HX711_Calibration cal_data;
+	
 	// V-table
 	uint8_t (*get_amplify)(struct model_hx711* self);
 	uint8_t (*read_bit)(void);
@@ -59,12 +60,12 @@ struct model_hx711{
 	int32_t (*read_raw)(struct model_hx711* self);
 	float (*raw_average)(struct model_hx711* self, uint8_t n);
 	uint8_t (*get_readflag)(struct model_hx711* self);
-	HX711_calibration* (*get_cal)(struct model_hx711* self);
+	HX711_Calibration* (*get_cal)(struct model_hx711* self);
 };
 
-typedef struct model_hx711 HX711;
+typedef struct model_hx711 HX711_Handler;
 
-HX711 hx711_enable(volatile uint8_t *ddr, volatile uint8_t *pin, volatile uint8_t *port, uint8_t datapin, uint8_t clkpin);
+HX711_Handler hx711_enable(volatile uint8_t *ddr, volatile uint8_t *pin, volatile uint8_t *port, uint8_t datapin, uint8_t clkpin);
 
 #endif
 /*** EOF ***/

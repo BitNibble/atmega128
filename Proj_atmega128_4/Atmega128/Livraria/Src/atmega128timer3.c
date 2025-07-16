@@ -19,7 +19,7 @@ uint8_t TIMER_COUNTER3_start(unsigned int prescaler);
 uint8_t TIMER_COUNTER3_stop(void);
 
 /*** Internal State ***/
-static TC3 atmega128_tc3 = {
+static TC3_Handler atmega128_tc3 = {
 	// Callback
 	.callback = {
 		.capt_vect = NULL,
@@ -174,7 +174,7 @@ void tc3_enable(unsigned char wavegenmode, unsigned char interrupt)
 	tc3_reg()->ocr3c = writeHLbyte(~0);
 }
 
-TC3* tc3(void){ return &atmega128_tc3;}
+TC3_Handler* tc3(void){ return &atmega128_tc3;}
 
 /*** Procedure and Function definition ***/
 uint8_t TIMER_COUNTER3_start(unsigned int prescaler)

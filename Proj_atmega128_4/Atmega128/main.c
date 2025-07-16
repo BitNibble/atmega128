@@ -35,9 +35,9 @@ Comment:
 #define repeat 59
 
 /*** Variable ***/
-HC595 shift;
-ZNPID pid_1;
-ZNPID pid_2;
+HC595_Handler shift;
+ZNPID_Handler pid_1;
+ZNPID_Handler pid_2;
 uint8_t count=0; // 1Hz
 uint8_t increment=0; // 1Hz
 char* ptr=NULL; // pointing to analog reading string
@@ -56,7 +56,7 @@ int main(void)
 PORTINIT(); // Inic Ports
 /*** Handler ***/
 lcd0_enable(&DDRA,&PINA,&PORTA); // LCD Display 4X20
-KEYPAD keypad = keypad_enable(&DDRE,&PINE,&PORTE); // Keyboard
+KEYPAD_Handler keypad = keypad_enable(&DDRE,&PINE,&PORTE); // Keyboard
 adc_enable(1, 128, 1, 0); // Channel 0 for Position
 tc0_enable(2,2); // 1Hz to HC595
 tc1_enable(9,0); // PWM Positioning

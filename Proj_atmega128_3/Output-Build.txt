@@ -1,7 +1,7 @@
-﻿------ Clean started: Project: Atmega128, Configuration: Release AVR ------
+﻿------ Clean started: Project: Atmega128, Configuration: Debug AVR ------
 Build started.
 Project "Atmega128.cproj" (Clean target(s)):
-Target "Clean" in file "C:\Program Files (x86)\Atmel\Studio\7.0\Vs\Compiler.targets" from project "D:\Embedded\Atmega_128\Proj_atmega128_3\Atmega128\Atmega128.cproj" (entry point):
+Target "Clean" in file "C:\Program Files (x86)\Atmel\Studio\7.0\Vs\Compiler.targets" from project "D:\Embedded\atmega128\Proj_atmega128_3\Atmega128\Atmega128.cproj" (entry point):
 	Task "RunCompilerTask"
 		Shell Utils Path C:\Program Files (x86)\Atmel\Studio\7.0\shellUtils
 		C:\Program Files (x86)\Atmel\Studio\7.0\shellUtils\make.exe clean 

@@ -65,9 +65,9 @@ typedef struct
 	unsigned int (*getnumv2)(char* x);
 	int (*readint)(int nmin, int nmax);
 	**************************************************/
-}FUNC;
+}FUNC_Handler;
 
-FUNC* func(void);
+FUNC_Handler* func(void);
 
 #endif
 /*** EOF ***/

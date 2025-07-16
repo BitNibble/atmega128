@@ -67,7 +67,7 @@ static int lcd0_putchar(char c, FILE *stream);
 static int lcd1_putchar(char c, FILE *stream);
 
 /*** Internal State ***/
-static LCD0 lcd0_setup = {
+static LCD0_Handler lcd0_setup = {
 	// V-table
 	.write = LCD0_write,
 	.read = LCD0_read,
@@ -82,7 +82,7 @@ static LCD0 lcd0_setup = {
 	.reboot = LCD0_reboot,
 	.printf = printf
 };
-static LCD1 lcd1_setup = {
+static LCD1_Handler lcd1_setup = {
 	// V-table
 	.write = LCD1_write,
 	.read = LCD1_read,
@@ -116,7 +116,7 @@ void lcd0_enable(volatile uint8_t *ddr, volatile uint8_t *pin, volatile uint8_t 
 	stdout = &lcd0_stdout;  // Redirect printf to the LCD
 }
 
-LCD0* lcd0(void){ return &lcd0_setup; }
+LCD0_Handler* lcd0(void){ return &lcd0_setup; }
 
 /*** Procedure & Function definition ***/
 void LCD0_inic(void)
@@ -303,7 +303,7 @@ void lcd1_enable(volatile uint8_t *ddr, volatile uint8_t *pin, volatile uint8_t 
 	stdout = &lcd1_stdout;  // Redirect printf to the LCD
 }
 
-LCD1* lcd1(void){ return &lcd1_setup; }
+LCD1_Handler* lcd1(void){ return &lcd1_setup; }
 
 void LCD1_inic(void)
 {

@@ -30,9 +30,9 @@ typedef struct{
 	char* (*gets)(void);
 	char* (*data)(void);
 	void (*data_clear)(void);
-}MM74C923;
+}MM74C923_Handler;
 
-MM74C923 mm74c923_enable(volatile uint8_t *ddr, volatile uint8_t *pin, volatile uint8_t *port);
+MM74C923_Handler mm74c923_enable(volatile uint8_t *ddr, volatile uint8_t *pin, volatile uint8_t *port);
 
 #endif
 /*** EOF ***/

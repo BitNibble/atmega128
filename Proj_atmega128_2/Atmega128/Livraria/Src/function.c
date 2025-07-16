@@ -64,7 +64,7 @@ int FUNCreadint(int nmin, int nmax);
 ******************************/
 
 /*** Internal State ***/
-static FUNC setup_func = {
+static FUNC_Handler setup_func = {
 	// V-table
 	.stringlength = StringLength,
 	.reverse = Reverse,
@@ -109,7 +109,7 @@ static FUNC setup_func = {
 };
 
 /*** Handler ***/
-FUNC* func(void){ return &setup_func; }
+FUNC_Handler* func(void){ return &setup_func; }
 
 /*** Procedure and Function definition ***/
 unsigned int FUNCmayia(unsigned int xi, unsigned int xf, uint8_t nbits)

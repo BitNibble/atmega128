@@ -9,15 +9,15 @@ Date:     25102020
 #include "rotenc.h"
 
 /*** Procedure and Function declaration ***/
-rotaryencoder_parameter RotEnc_rte(rotaryencoder_parameter* par, uint8_t data);
+ROTENC_Parameter RotEnc_rte(ROTENC_Parameter* par, uint8_t data);
 uint8_t ROTENClh(uint8_t xp, uint8_t xi);
 uint8_t ROTENChl(uint8_t xp, uint8_t xi);
 
 /*** Handler ***/
-ROTENC rotenc_enable( uint8_t ChnApin, uint8_t ChnBpin )
+ROTENC_Handler rotenc_enable( uint8_t ChnApin, uint8_t ChnBpin )
 {
 	// struct object
-	ROTENC setup_rtnc;
+	ROTENC_Handler setup_rtnc;
 	
 	// Parameter
 	setup_rtnc.par.PinChnA = ChnApin;
@@ -31,7 +31,7 @@ ROTENC rotenc_enable( uint8_t ChnApin, uint8_t ChnBpin )
 }
 
 /*** Procedure and Function definition ***/
-rotaryencoder_parameter RotEnc_rte(rotaryencoder_parameter* par, uint8_t data)
+ROTENC_Parameter RotEnc_rte(ROTENC_Parameter* par, uint8_t data)
 {
 	uint8_t hl;
 	par->chn = data & ((1 << par->PinChnB) | (1 << par->PinChnA));

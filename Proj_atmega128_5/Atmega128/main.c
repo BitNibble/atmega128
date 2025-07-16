@@ -37,10 +37,10 @@ Comment:
 #define SMAX +200
 
 /*** Variable ***/
-struct time tm; // time struct RTC
-struct date dt; // date struct RTC
+PCF8563RTC_Time tm; // time struct RTC
+PCF8563RTC_Date dt; // date struct RTC
 
-PCF8563RTC rtc;
+PCF8563RTC_Handler rtc;
 char* uartreceive = NULL; // capture
 
 /**** Handler ****/
@@ -49,8 +49,8 @@ int main(void)
 usart1_enable(38400,8,1,NONE); // UART 103 para 9600 (ESP01), 68 para 14400, 25 para 38400 (HC05), 8 para 115200
 lcd02p_enable(&DDRA,&PINA,&PORTA,&DDRA,&PINA,&PORTA); // LCD Display 4X20
 rtc = pcf8563rtc_enable( 16 ); // RTC with I2C
-L293D l293 = l293d_enable(&DDRC, &PORTC, 0, 1, 2);
-PCF8575 pcf8575 = pcf8575_enable(32,16);
+L293D_Handler l293 = l293d_enable(&DDRC, &PORTC, 0, 1, 2);
+PCF8575_Handler pcf8575 = pcf8575_enable(32,16);
 
 char uartmsg[UART1_RX_BUFFER_SIZE] = {0}; // One shot
 char uartmsgprint[UART1_RX_BUFFER_SIZE] = {0}; // triggered

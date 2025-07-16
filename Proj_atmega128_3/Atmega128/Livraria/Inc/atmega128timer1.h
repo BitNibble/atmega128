@@ -42,10 +42,10 @@ typedef struct {
     void    (*compareC)(uint16_t value);
     uint8_t (*start)(uint16_t prescaler);
     uint8_t (*stop)(void);
-} TC1;
+} TC1_Handler;
 
 void  tc1_enable(uint8_t wavegenmode, uint8_t interrupt);
-TC1* tc1(void);
+TC1_Handler* tc1(void);
 
 #endif
 /*** EOF ***/

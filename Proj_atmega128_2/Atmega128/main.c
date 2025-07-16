@@ -49,12 +49,12 @@ Comment:
 #define SMAX +200
 
 /*** Variable ***/
-struct time tm; // time struct RTC
-struct date dt; // date struct RTC
+PCF8563RTC_Time tm; // time struct RTC
+PCF8563RTC_Date dt; // date struct RTC
 
-HC595 shift;
-PCF8563RTC rtc;
-PCF8575_LCD0 pcflcd;
+HC595_Handler shift;
+PCF8563RTC_Handler rtc;
+PCF8575_LCD0_Handler pcflcd;
 
 uint8_t count=0; // 1Hz
 uint8_t increment=0; // 1Hz

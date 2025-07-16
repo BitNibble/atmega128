@@ -31,20 +31,21 @@ Date:     13072025
 
 /*** Parameter ***/
 typedef struct{
-	TWI0* twi;
+	TWI0_Handler* twi;
 	uint8_t pcf8575_id;
 	uint16_t state;
-}pcf8575_parameter;
+}PCF8575_Parameter;
 
 /*** Handler ***/
 typedef struct{
+	PCF8575_Parameter par;
+	
 	// V-table
-	pcf8575_parameter par;
-	void (*writehbits)( pcf8575_parameter *par, uint16_t hbits, uint8_t state );
-	uint16_t (*readhbits)( pcf8575_parameter *par, uint16_t hbits );
-}PCF8575;
+	void (*writehbits)( PCF8575_Parameter *par, uint16_t hbits, uint8_t state );
+	uint16_t (*readhbits)( PCF8575_Parameter *par, uint16_t hbits );
+}PCF8575_Handler;
 
-PCF8575 pcf8575_enable( uint8_t pcf8575_id, uint8_t twi_prescaler );
+PCF8575_Handler pcf8575_enable( uint8_t pcf8575_id, uint8_t twi_prescaler );
 
 #endif
 /*** EOF ***/

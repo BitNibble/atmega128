@@ -29,9 +29,9 @@ typedef struct{
 	void (*read_block) ( void * pointer_ram , const void * pointer_eeprom , size_t n);
 	void (*write_block) ( const void * pointer_ram , void * pointer_eeprom , size_t n);
 	void (*update_block) ( const void * pointer_ram , void * pointer_eeprom , size_t n);
-}EEPROM0;
+}EEPROM0_Handler;
 
-EEPROM0* eeprom(void);
+EEPROM0_Handler* eeprom(void);
 
 #endif
 /*** EOF ***/

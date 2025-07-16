@@ -17,7 +17,7 @@ typedef struct {
 	uint8_t minute;
 	uint8_t second;
 	volatile uint32_t seconds;
-} WATCH_TIME;
+} WATCH_Time;
 
 /*** Handler ***/
 typedef struct {
@@ -26,9 +26,9 @@ typedef struct {
 	uint8_t (*start_delay)(uint8_t n_delay, uint32_t seconds);
 	void (*increment)(void);
 	char* (*show)(void);
-} WATCH;
+} WATCH_Handler;
 
-WATCH watch_enable(void);
+WATCH_Handler watch_enable(void);
 
 /*** Procedure and Funtion declaration ***/
 extern void WATCH_increment(void);

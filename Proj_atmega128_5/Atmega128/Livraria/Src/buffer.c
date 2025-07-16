@@ -11,15 +11,15 @@ Date:     17112022
 #include <string.h>
 
 /*** Procedure and Function declaration ***/
-void BUFF_push(buffer_parameter* par, BUFFvar data);
-BUFFvar* BUFF_raw(buffer_parameter* par);
-void BUFF_flush(buffer_parameter* par);
+void BUFF_push(BUFF_Parameter* par, BUFFvar data);
+BUFFvar* BUFF_raw(BUFF_Parameter* par);
+void BUFF_flush(BUFF_Parameter* par);
 
 /*** Handler ***/
-BUFF buff_enable( uint16_t size_buff, BUFFvar* buff )
+BUFF_Handler buff_enable( uint16_t size_buff, BUFFvar* buff )
 {
 	// OBJECT STRUCT
-	BUFF setup_buffer;
+	BUFF_Handler setup_buffer;
 	// inic VAR
 	setup_buffer.par.orig = buff;
 	setup_buffer.par.head = buff;
@@ -33,7 +33,7 @@ BUFF buff_enable( uint16_t size_buff, BUFFvar* buff )
 }
 
 /*** Procedure and Function definition ***/
-void BUFF_push( buffer_parameter* par, BUFFvar data ){
+void BUFF_push( BUFF_Parameter* par, BUFFvar data ){
 	BUFFvar* head; BUFFvar* next;
 	head = par->head;
 	if(data){
@@ -49,11 +49,11 @@ void BUFF_push( buffer_parameter* par, BUFFvar data ){
 	}
 }
 
-BUFFvar* BUFF_raw( buffer_parameter* par ){
+BUFFvar* BUFF_raw( BUFF_Parameter* par ){
 		return par->orig;
 }
 
-void BUFF_flush( buffer_parameter* par ){
+void BUFF_flush( BUFF_Parameter* par ){
 	BUFFvar* head;
 	head = par->orig;
 	par->head = head;

@@ -27,17 +27,17 @@ typedef struct {
 	IO_var LL;
 	IO_var LH;
 	IO_var HL;
-}explode_parameter;
+}EXPLODE_Parameter;
 
 /*** Handler ***/
 typedef struct {
-	explode_parameter par;
+	EXPLODE_Parameter par;
 	
 	// V-table
-	void (*update)(explode_parameter* par, IO_var x);
-}EXPLODE;
+	void (*update)(EXPLODE_Parameter* par, IO_var x);
+}EXPLODE_Handler;
 
-EXPLODE explode_enable(void);
+EXPLODE_Handler explode_enable(void);
 
 #endif
 /*** EOF ***/

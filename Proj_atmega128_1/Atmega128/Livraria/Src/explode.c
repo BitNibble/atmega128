@@ -9,17 +9,17 @@ Date:     16032021
 #include"explode.h"
 
 /*** Procedure and Function declaration ***/
-void EXPLODEupdate(explode_parameter* par, IO_var x);
-IO_var EXPLODEhh(explode_parameter* par);
-IO_var EXPLODEll(explode_parameter* par);
-IO_var EXPLODElh(explode_parameter* par);
-IO_var EXPLODEhl(explode_parameter* par);
+void EXPLODEupdate(EXPLODE_Parameter* par, IO_var x);
+IO_var EXPLODEhh(EXPLODE_Parameter* par);
+IO_var EXPLODEll(EXPLODE_Parameter* par);
+IO_var EXPLODElh(EXPLODE_Parameter* par);
+IO_var EXPLODEhl(EXPLODE_Parameter* par);
 
 /*** Handler ***/
-EXPLODE explode_enable( void )
+EXPLODE_Handler explode_enable( void )
 {
 	// Parameter
-	EXPLODE setup_explode = {
+	EXPLODE_Handler setup_explode = {
 		.par = {
 			.HH = 0,
 			.HL = 0,
@@ -35,7 +35,7 @@ EXPLODE explode_enable( void )
 	return setup_explode;
 }
 /*** Procedure and Function definition ***/
-void EXPLODEupdate(explode_parameter* par, IO_var x)
+void EXPLODEupdate(EXPLODE_Parameter* par, IO_var x)
 {
 	par->XI = par->XF;
 	par->XF = x;
@@ -44,22 +44,22 @@ void EXPLODEupdate(explode_parameter* par, IO_var x)
 	par->LH = EXPLODElh(par);
 	par->HL = EXPLODEhl(par);
 }
-IO_var EXPLODEhh(explode_parameter* par)
+IO_var EXPLODEhh(EXPLODE_Parameter* par)
 {
 	return (par->XI & par->XF);
 }
-IO_var EXPLODEll(explode_parameter* par)
+IO_var EXPLODEll(EXPLODE_Parameter* par)
 {
 	return ~(par->XI | par->XF);
 }
-IO_var EXPLODElh(explode_parameter* par)
+IO_var EXPLODElh(EXPLODE_Parameter* par)
 {
 	IO_var i;
 	i = par->XI ^ par->XF;
 	i &= par->XF;
 	return i;
 }
-IO_var EXPLODEhl(explode_parameter* par)
+IO_var EXPLODEhl(EXPLODE_Parameter* par)
 {
 	IO_var i;
 	i = par->XF ^ par->XI;

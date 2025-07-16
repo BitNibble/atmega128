@@ -12,9 +12,9 @@ Date:     26/06/2025
 #include <string.h>
 
 /*** Variable ***/
-static BUFF rx0buff;
+static BUFF_Handler rx0buff;
 static UARTvar UART0_Rx;
-static UARTvar UART0_RxBuf[UART0_RX_BUFFER_SIZE];
+static UARTvar UART0_RxBuf[UART0_RX_BUFFER_SIZE] = {0};
 static const uint16_t uart0_rx_buffer_size = UART0_RX_BUFFER_SIZE - 1;
 static uint8_t UART0_LastRxError;
 static uint8_t uart0flag;
@@ -39,7 +39,7 @@ void USART0ClearErrors(void);
 void USART0DoubleTransmissionSpeed(void);
 
 /*** Internal State ***/
-static USART0 atmega128_usart0 = {
+static USART0_Handler atmega128_usart0 = {
 	// V-table
 	.read = uart0_read,
 	.getch = uart0_getch,
@@ -129,7 +129,7 @@ void usart0_enable(uint32_t baud, unsigned int FDbits, unsigned int Stopbits, un
 	cpu_reg()->sreg.par.i = 1;
 }
 
-USART0* usart0(void){ return &atmega128_usart0; }
+USART0_Handler* usart0(void){ return &atmega128_usart0; }
 
 /*** Procedure and Function definition ***/
 UARTvar uart0_read(void)
@@ -173,7 +173,7 @@ void uart0_puts(UARTvar* s)
 	}
 }
 /*** Complimentary functions ***/
-char* usart0_messageprint(USART0* uart, char* oneshot, char* msg, const char* endl)
+char* usart0_messageprint(USART0_Handler* uart, char* oneshot, char* msg, const char* endl)
 {
 	char* ptr;
 	uint8_t length;

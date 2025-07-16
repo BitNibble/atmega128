@@ -19,7 +19,7 @@ uint8_t TWI_status(void);
 void TWI_wait_twint(uint16_t nticks);
 
 /*** Internal State ***/
-static TWI0 atmega128_twi = {
+static TWI0_Handler atmega128_twi = {
 	// V-table
 	.start = TWI_start,
 	.connect = TWI_connect,
@@ -62,7 +62,7 @@ void twi_enable(uint8_t atmega_id,  uint8_t prescaler)
 	twi_reg()->twbr.var = ((F_CPU / TWI_SCL_CLOCK) - 16) / (2 * prescaler);
 }
 
-TWI0* twi(void){ return &atmega128_twi; }
+TWI0_Handler* twi(void){ return &atmega128_twi; }
 
 /*** Procedure and Function definition ***/
 void TWI_start(void)

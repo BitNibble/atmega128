@@ -9,15 +9,15 @@ Date:     13072025
 #include "pcf8575.h"
 
 /*** Procedure and Function declaration ***/
-void PCF8575_writehbits( pcf8575_parameter *par, uint16_t hbits, uint8_t state );
-uint16_t PCF8575_readhbits( pcf8575_parameter *par, uint16_t hbits );
+void PCF8575_writehbits( PCF8575_Parameter *par, uint16_t hbits, uint8_t state );
+uint16_t PCF8575_readhbits( PCF8575_Parameter *par, uint16_t hbits );
 
 /*** Handler ***/
-PCF8575 pcf8575_enable(uint8_t pcf8575_id, uint8_t twi_prescaler)
+PCF8575_Handler pcf8575_enable(uint8_t pcf8575_id, uint8_t twi_prescaler)
 {
 	twi_enable(pcf8575_id, twi_prescaler);
 	
-	PCF8575 setup_pcf8575 = {
+	PCF8575_Handler setup_pcf8575 = {
 		.par = {
 			.twi =  twi(),
 			.pcf8575_id = pcf8575_id,
@@ -33,7 +33,7 @@ PCF8575 pcf8575_enable(uint8_t pcf8575_id, uint8_t twi_prescaler)
 }
 
 /*** Procedure and Function definition ***/
-void PCF8575_writehbits(pcf8575_parameter *par, uint16_t hbits, uint8_t state)
+void PCF8575_writehbits(PCF8575_Parameter *par, uint16_t hbits, uint8_t state)
 {
 	if(state) par->state |= hbits; else par->state &= ~hbits;
 	par->twi->start();
@@ -43,7 +43,7 @@ void PCF8575_writehbits(pcf8575_parameter *par, uint16_t hbits, uint8_t state)
 	par->twi->stop();
 }
 
-uint16_t PCF8575_readhbits(pcf8575_parameter *par, uint16_t hbits)
+uint16_t PCF8575_readhbits(PCF8575_Parameter *par, uint16_t hbits)
 {
 	U_word data;
 	par->twi->start();

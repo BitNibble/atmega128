@@ -26,23 +26,23 @@ Date:     29112022
 #define PCF8563CLKOUT_control_U8     0x0D	 // External oscillating pin
 
 /*** Parameter ***/
-struct date{
+typedef struct {
 	uint8_t years;
 	uint8_t century_months;
 	uint8_t weekdays;
 	uint8_t days;	
-};
-struct time{
+}PCF8563RTC_Date;
+typedef struct {
 	uint8_t hours;
 	uint8_t minutes;
 	uint8_t VL_seconds;
-};
-struct alarm{
+}PCF8563RTC_Time;
+typedef struct {
 	uint8_t minute_alarm;
 	uint8_t	hour_alarm;
 	uint8_t day_alarm;
 	uint8_t weekday_alarm;
-};
+}PCF8563RTC_Alarm;
 
 /*** Handler ***/
 typedef struct{
@@ -57,13 +57,13 @@ typedef struct{
 	void (*SetWeekday)(uint8_t var_weekday_u8);
 	void (*SetMonth)(uint8_t var_month_u8);
 	void (*SetYear)(uint8_t var_year_u8);
-	struct time (*GetTime)(void);
-	struct date (*GetDate)(void);
+	PCF8563RTC_Time (*GetTime)(void);
+	PCF8563RTC_Date (*GetDate)(void);
 	uint8_t (*bcd2dec)(uint8_t num);
 	uint8_t (*bintobcd)(uint8_t bin);
-}PCF8563RTC;
+}PCF8563RTC_Handler;
 
-PCF8563RTC pcf8563rtc_enable(uint8_t prescaler);
+PCF8563RTC_Handler pcf8563rtc_enable(uint8_t prescaler);
 
 #endif
 /*** EOF ***/

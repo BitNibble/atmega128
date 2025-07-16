@@ -17,7 +17,7 @@ Comment:
 #define BYTEH 65535
 
 /*** Variable ***/
-struct lfsmdata data, tmp1, tmp2;
+struct LFSM_Data data, tmp1, tmp2;
 const uint16_t tmask = 0xFFFF;
 
 /*** Procedure and Function declaration ***/
@@ -37,12 +37,12 @@ uint16_t LFSMhl(uint16_t xi, uint16_t xf);
 uint16_t LFSMoutputcalc(uint16_t feedback, uint16_t hl, uint16_t lh, uint16_t mask);
 
 /*** Handler ***/
-LFSM lfsm_enable(EEPROM0* eeprom, const uint16_t sizeeeprom)
+LFSM_Handler lfsm_enable(EEPROM0_Handler* eeprom, const uint16_t sizeeeprom)
 {
 	// Local Variable
-	const uint8_t sizeblock = sizeof(struct lfsmdata);
+	const uint8_t sizeblock = sizeof(struct LFSM_Data);
 	// Create Object
-	LFSM r;
+	LFSM_Handler r;
 	// Initialize variables
 	r.eprom = eeprom;
 	r.sizeeeprom = sizeeeprom;
@@ -72,7 +72,7 @@ uint8_t LFSMread(struct model_lfsm *r, uint8_t input)
 	uint16_t i1;
 	uint8_t status = 0;
 	uint8_t sizeblock = r->sizeblock;
-	struct lfsmdata* pdata = &data;
+	struct LFSM_Data* pdata = &data;
 	int16_t n = 0;
 	uint8_t n1 = NPAGES, n2 = NPAGES;
 	uint8_t page = r->page;
@@ -82,7 +82,7 @@ uint8_t LFSMread(struct model_lfsm *r, uint8_t input)
 	if(HL || LH){ // To not waste time
 		status = 1; // New entry
 		for(i1 = 0; i1 < r->sizeeeprom; i1++){
-			r->eprom->read_block(pdata, (struct lfsmdata*)(i1 * sizeblock), sizeblock);
+			r->eprom->read_block(pdata, (struct LFSM_Data*)(i1 * sizeblock), sizeblock);
 			switch(pdata->page){
 				case 0:
 					// Do nothing, continue search in status=1.
@@ -167,15 +167,15 @@ uint8_t LFSMlearn(struct model_lfsm *r, const uint8_t input, const uint16_t next
 	uint16_t i1;
 	uint8_t status = 0;
 	uint8_t sizeblock = r->sizeblock;
-	struct lfsmdata* pdata = &data;
-	struct lfsmdata* ptmp1 = &tmp1;
+	struct LFSM_Data* pdata = &data;
+	struct LFSM_Data* ptmp1 = &tmp1;
 	uint16_t HL, LH;
 	HL = LFSMhl(r->input, input);
 	LH = LFSMlh(r->input, input);
 	if(page > 0){ // Enable
 		if(HL || LH){ // There is a change ?
 			for(i1 = 0; i1 < r->sizeeeprom; i1++){
-				r->eprom->read_block(pdata, (struct lfsmdata*)(i1 * sizeblock), sizeblock);
+				r->eprom->read_block(pdata, (struct LFSM_Data*)(i1 * sizeblock), sizeblock);
 				if(pdata->page){ // Find if it exists already
 					if( (pdata->page == 1 && pdata->inhl == HL && pdata->inlh == LH)
 					|| (pdata->page == page && (pdata->feedback & mask) == (r->output & mask) && pdata->inhl == HL && pdata->inlh == LH) ){
@@ -204,7 +204,7 @@ uint8_t LFSMlearn(struct model_lfsm *r, const uint8_t input, const uint16_t next
 				ptmp1->outlh = LFSMlh(BYTEL, next) & mask;
 			}
 			for(i1 = 0; i1 < r->sizeeeprom; i1++){ // upload to free space in memory
-				r->eprom->read_block(pdata, (struct lfsmdata*)(i1 * sizeblock), sizeblock);
+				r->eprom->read_block(pdata, (struct LFSM_Data*)(i1 * sizeblock), sizeblock);
 				if(pdata->page == 0){
 					r->eprom->update_block(ptmp1, (void*)(i1 * sizeblock), sizeblock);
 					status = 2; // Uploaded to eeprom
@@ -228,10 +228,10 @@ uint16_t LFSMquant(struct model_lfsm *r)
 {
 	uint16_t i1;
 	uint8_t sizeblock = r->sizeblock;
-	struct lfsmdata* pdata = &data;
+	struct LFSM_Data* pdata = &data;
 	uint16_t programmed;
 	for(i1 = 0, programmed = 0; i1 < r->sizeeeprom; i1++){
-		r->eprom->read_block(pdata, (struct lfsmdata*)(i1 * sizeblock), sizeblock);
+		r->eprom->read_block(pdata, (struct LFSM_Data*)(i1 * sizeblock), sizeblock);
 		if(pdata->page != 0){ // Count memory used
 			programmed++;
 		}
@@ -245,8 +245,8 @@ uint8_t LFSMremove(struct model_lfsm *r, uint8_t input)
 	k = k1 = k2 = 0;
 	uint8_t status = 0;
 	uint8_t sizeblock = r->sizeblock;
-	struct lfsmdata* pdata = &data;
-	struct lfsmdata* ptmp1 = &tmp1;
+	struct LFSM_Data* pdata = &data;
+	struct LFSM_Data* ptmp1 = &tmp1;
 	ptmp1->page = 0;
 	int16_t n = 0;
 	uint8_t n1 = NPAGES, n2 = NPAGES;
@@ -257,7 +257,7 @@ uint8_t LFSMremove(struct model_lfsm *r, uint8_t input)
 	if(HL || LH){ // To not waste time
 		status = 1; // New entry
 		for(i1 = 0; i1 < r->sizeeeprom; i1++){
-			r->eprom->read_block(pdata, (struct lfsmdata*)(i1 * sizeblock), sizeblock);
+			r->eprom->read_block(pdata, (struct LFSM_Data*)(i1 * sizeblock), sizeblock);
 			switch(pdata->page){
 				case 0:
 					// Do nothing, continue search in status=1.
@@ -332,8 +332,8 @@ uint8_t LFSMpremove(struct model_lfsm *r, uint8_t input, uint8_t page)
 	k = k1 = k2 = 0;
 	uint8_t status = 0;
 	uint8_t sizeblock = r->sizeblock;
-	struct lfsmdata* pdata = &data;
-	struct lfsmdata* ptmp1 = &tmp1;
+	struct LFSM_Data* pdata = &data;
+	struct LFSM_Data* ptmp1 = &tmp1;
 	ptmp1->page = 0;
 	uint16_t HL,LH;
 	HL = LFSMhl(r->input, input);
@@ -342,7 +342,7 @@ uint8_t LFSMpremove(struct model_lfsm *r, uint8_t input, uint8_t page)
 		if(HL || LH){ // input
 			status = 1;
 			for(i1 = 0; i1 < r->sizeeeprom; i1++){
-				r->eprom->read_block(pdata, (struct lfsmdata*)(i1 * sizeblock), sizeblock);
+				r->eprom->read_block(pdata, (struct LFSM_Data*)(i1 * sizeblock), sizeblock);
 				if(pdata->page == page){ // skip not desired
 					if( pdata->inhl == HL && pdata->inlh == LH && page == 1){
 						k = i1;
@@ -380,9 +380,9 @@ uint8_t LFSMdeleteall(struct model_lfsm *r)
 	uint16_t i1;
 	uint8_t status = 0;
 	uint8_t sizeblock = r->sizeblock;
-	struct lfsmdata* pdata = &data;
+	struct LFSM_Data* pdata = &data;
 	for(i1 = 0; i1 < r->sizeeeprom; i1++){
-		r->eprom->read_block(pdata, (struct lfsmdata*)(i1 * sizeblock), sizeblock);
+		r->eprom->read_block(pdata, (struct LFSM_Data*)(i1 * sizeblock), sizeblock);
 		if(pdata->page){
 			pdata->page = 0;
 			r->eprom->update_block(pdata, (void*)(i1 * sizeblock), sizeblock);

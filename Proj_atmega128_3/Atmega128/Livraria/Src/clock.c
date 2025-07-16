@@ -9,9 +9,9 @@ Date:     25102020
 #include "clock.h"
 
 /*** Variable ***/
-struct CLOCKTIME time;
-struct CLOCKTIME laptime;
-struct CLOCKTIME alarmtime;
+struct CLOCK_Time time;
+struct CLOCK_Time laptime;
+struct CLOCK_Time alarmtime;
 char CLOCK_timp[9];
 uint8_t CLOCK_alarm_flag;
 uint8_t CLOCK_compare_active;
@@ -29,9 +29,9 @@ void CLOCK_alarm_stop(void);
 char* CLOCK_show(void);
 
 /*** Handler ***/
-CLOCK clock_enable(uint8_t hour, uint8_t minute, uint8_t second)
+CLOCK_Handler clock_enable(uint8_t hour, uint8_t minute, uint8_t second)
 {
-	CLOCK setup_clock;
+	CLOCK_Handler setup_clock;
 	
 	time.hour = hour;
 	time.minute = minute;

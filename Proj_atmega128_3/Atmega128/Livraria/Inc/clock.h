@@ -15,7 +15,7 @@ Date:     25102020
 #define HORA 24
 
 /*** Parameter ***/
-struct CLOCKTIME{
+struct CLOCK_Time{
 	int8_t hour;
 	int8_t minute;
 	int8_t second;
@@ -34,9 +34,9 @@ typedef struct{
 	void (*alarm_reset)(void);
 	void (*alarm_stop)(void);
 	char* (*show)(void);
-}CLOCK;
+}CLOCK_Handler;
 
-CLOCK clock_enable(uint8_t hour, uint8_t minute, uint8_t second);
+CLOCK_Handler clock_enable(uint8_t hour, uint8_t minute, uint8_t second);
 
 #endif
 /*** EOF ***/

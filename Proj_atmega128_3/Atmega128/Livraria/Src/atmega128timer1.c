@@ -19,7 +19,7 @@ uint8_t TIMER_COUNTER1_start(unsigned int prescaler);
 uint8_t TIMER_COUNTER1_stop(void);
 
 /*** Internal State ***/
-static TC1 atmega128_tc1 = {
+static TC1_Handler atmega128_tc1 = {
 	// Callback
 	.callback = {
 		.capt_vect = NULL,
@@ -178,7 +178,7 @@ void tc1_enable(unsigned char wavegenmode, unsigned char interrupt)
 	tc1_reg()->ocr1c = writeHLbyte(~0);
 }
 
-TC1* tc1(void){ return &atmega128_tc1; }
+TC1_Handler* tc1(void){ return &atmega128_tc1; }
 
 /*** Procedure and Function definition ***/
 uint8_t TIMER_COUNTER1_start(unsigned int prescaler)

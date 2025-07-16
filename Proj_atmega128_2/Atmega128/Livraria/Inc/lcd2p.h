@@ -63,10 +63,10 @@ typedef struct{
 	void (*gotoxy)(unsigned int y, unsigned int x);
 	void (*reboot)(void);
 	int (*printf)(const char *fmt, ...);
-}LCD02P;
+}LCD02P_Handler;
 
 void lcd02p_enable(volatile uint8_t *cmdddr, volatile uint8_t *cmdpin, volatile uint8_t *cmdport, volatile uint8_t *dataddr, volatile uint8_t *datapin, volatile uint8_t *dataport);
-LCD02P* lcd02p(void);
+LCD02P_Handler* lcd02p(void);
 
 #endif
 /*** EOF ***/

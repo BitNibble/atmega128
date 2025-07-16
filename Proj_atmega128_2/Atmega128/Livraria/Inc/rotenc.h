@@ -18,17 +18,17 @@ typedef struct{
 	uint8_t pchn;
 	uint8_t chn;
 	uint16_t num;
-}rotaryencoder_parameter;
+}ROTENC_Parameter;
 
 /*** Handler ***/
 typedef struct{
-	rotaryencoder_parameter par;
+	ROTENC_Parameter par;
 	
 	// V-table
-	rotaryencoder_parameter (*rte)(rotaryencoder_parameter* par, uint8_t data);
-}ROTENC;
+	ROTENC_Parameter (*rte)(ROTENC_Parameter* par, uint8_t data);
+}ROTENC_Handler;
 
-ROTENC rotenc_enable(uint8_t ChnApin, uint8_t ChnBpin);
+ROTENC_Handler rotenc_enable(uint8_t ChnApin, uint8_t ChnBpin);
 
 #endif
 /*** EOF ***/
