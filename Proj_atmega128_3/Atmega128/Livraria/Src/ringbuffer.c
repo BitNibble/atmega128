@@ -57,8 +57,8 @@ uint16_t RingBuffer_Available(RingBuffer_Parameter *par) {
 }
 
 /*** Handler Generator ***/
-RingBuffer_TypeDef RingBuffer_Init(uint8_t *buf, uint16_t size) {
-	RingBuffer_TypeDef setup = {
+RingBuffer_Handler RingBuffer_Init(uint8_t *buf, uint16_t size) {
+	RingBuffer_Handler setup = {
 		.par = {
 			.buffer = buf,
 			.size = (size - 1),

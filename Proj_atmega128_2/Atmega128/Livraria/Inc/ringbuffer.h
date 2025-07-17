@@ -26,19 +26,19 @@ typedef struct {
 typedef struct {
     RingBuffer_Parameter par;
     // V-table
-	bool (* const IsFull)(RingBuffer_Parameter *rb);
-	bool (* const IsEmpty)(RingBuffer_Parameter *rb);
-	bool (* const Put)(RingBuffer_Parameter *rb, uint8_t data);
-	bool (* const Get)(RingBuffer_Parameter *rb, uint8_t *data);
-	bool (* const Peek)(RingBuffer_Parameter *par, uint8_t *data);
-    void (* const PrintStatus)(RingBuffer_Parameter *par);
-    void (* const Clear)(RingBuffer_Parameter *par);
-    uint16_t (* const Capacity)(RingBuffer_Parameter *par);
-    uint16_t (* const Available)(RingBuffer_Parameter *par);
-} RingBuffer_TypeDef;
+	bool (*IsFull)(RingBuffer_Parameter *rb);
+	bool (*IsEmpty)(RingBuffer_Parameter *rb);
+	bool (*Put)(RingBuffer_Parameter *rb, uint8_t data);
+	bool (*Get)(RingBuffer_Parameter *rb, uint8_t *data);
+	bool (*Peek)(RingBuffer_Parameter *par, uint8_t *data);
+    void (*PrintStatus)(RingBuffer_Parameter *par);
+    void (*Clear)(RingBuffer_Parameter *par);
+    uint16_t (*Capacity)(RingBuffer_Parameter *par);
+    uint16_t (*Available)(RingBuffer_Parameter *par);
+} RingBuffer_Handler;
 
 /*** Handler Generator ***/
-RingBuffer_TypeDef RingBuffer_Init(uint8_t *buf, uint16_t size);
+RingBuffer_Handler RingBuffer_Init(uint8_t *buf, uint16_t size);
 
 #endif
 

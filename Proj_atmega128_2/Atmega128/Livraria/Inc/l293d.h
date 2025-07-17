@@ -23,15 +23,15 @@ typedef struct {
     uint8_t pin1;
     uint8_t pin2;
     uint8_t en_pin;
-} L293D_Param;
+} L293D_Parameter;
 
 /*** Handler ***/
 typedef struct {
-    L293D_Param par;
-    void (*dir)(L293D_Param *par, uint8_t mode);
-    void (*enable)(L293D_Param *par, uint8_t state);
-} L293D;
+    L293D_Parameter par;
+    void (*dir)(L293D_Parameter *par, uint8_t mode);
+    void (*enable)(L293D_Parameter *par, uint8_t state);
+} L293D_Handler;
 
-L293D l293d_enable(volatile IO_var *ddr, volatile IO_var *port, uint8_t pin1, uint8_t pin2, uint8_t en_pin);
+L293D_Handler l293d_enable(volatile IO_var *ddr, volatile IO_var *port, uint8_t pin1, uint8_t pin2, uint8_t en_pin);
 
 #endif

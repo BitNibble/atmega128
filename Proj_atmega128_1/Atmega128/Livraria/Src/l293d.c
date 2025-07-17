@@ -1,12 +1,12 @@
 #include "l293d.h"
 
 /*** Internal ***/
-void l293d_set_dir(L293D_Param *par, uint8_t mode);
-void l293d_set_en(L293D_Param *par, uint8_t state);
+void l293d_set_dir(L293D_Parameter *par, uint8_t mode);
+void l293d_set_en(L293D_Parameter *par, uint8_t state);
 
 /*** Instance ***/
-L293D l293d_enable(volatile IO_var *ddr, volatile IO_var *port, uint8_t pin1, uint8_t pin2, uint8_t en_pin) {
-    L293D dev = {
+L293D_Handler l293d_enable(volatile IO_var *ddr, volatile IO_var *port, uint8_t pin1, uint8_t pin2, uint8_t en_pin) {
+    L293D_Handler dev = {
         .par = {
             .DDR = ddr,
             .PORT = port,
@@ -30,7 +30,7 @@ L293D l293d_enable(volatile IO_var *ddr, volatile IO_var *port, uint8_t pin1, ui
 }
 
 /*** Function ***/
-void l293d_set_dir(L293D_Param *par, uint8_t mode) {
+void l293d_set_dir(L293D_Parameter *par, uint8_t mode) {
     switch (mode) {
         case L293D_FORWARD:
             *par->PORT |= (1 << par->pin1);
@@ -47,7 +47,7 @@ void l293d_set_dir(L293D_Param *par, uint8_t mode) {
     }
 }
 
-void l293d_set_en(L293D_Param *par, uint8_t state) {
+void l293d_set_en(L293D_Parameter *par, uint8_t state) {
     if (state)
         *par->PORT |= (1 << par->en_pin);
     else
