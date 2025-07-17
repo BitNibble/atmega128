@@ -147,9 +147,11 @@ strcpy(str,func()->i16toa(adcvalue));
 	
 // catch message
 //if(!strcmp(uartreceive,"Connect\r\n")){Menu='6';usart1()->rxflush;lcd0()->clear();}
-if(!strcmp(uartreceive,"Connected\r\n")){Menu='6';lcd0()->clear();}
+//if(!strcmp(uartreceive,"Connected\r\n")){Menu='6';lcd0()->clear();}
 	
-//lcd0()->gotoxy(2,0);
+lcd0()->gotoxy(2,0);
+func()->rmcrnl(uartmsgprint);
+lcd0()->string_size(uartmsgprint,20);
 //lcd0()->string_size(func()->ui16toa(cpu_reg()->mcucr.par.ivsel),2);
 //lcd0()->string_size(func()->ui16toa(read_low_fuse()),4);
 //printf("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwABCDE");
@@ -181,20 +183,10 @@ switch(Menu){
 		lcd0()->string_size(str,5);
 			
 		lcd0()->gotoxy(0,8);
-		//lcd0()->string_size(func()->ui16toa(rtc.bcd2dec(dt.days)),2);
-		//lcd0()->putch(':');
-		//lcd0()->string_size(func()->ui16toa(rtc.bcd2dec(dt.century_months)),2);
-		//lcd0()->putch(':');
-		//lcd0()->string_size(func()->ui16toa(rtc.bcd2dec(dt.years)),2);
 		lcd0()->printf("%02d:%02d:%02d",rtc.bcd2dec(dt.days),rtc.bcd2dec(dt.century_months),rtc.bcd2dec(dt.years));
 		lcd0()->gotoxy(1,8);
 		// set hour for positioning
 		positionhour=rtc.bcd2dec(tm.hours);
-		//lcd0()->string_size(func()->ui16toa(positionhour),2);
-		//lcd0()->putch(':');
-		//lcd0()->string_size(func()->ui16toa(rtc.bcd2dec(tm.minutes)),2);
-		//lcd0()->putch(':');
-		//lcd0()->string_size(func()->ui16toa(rtc.bcd2dec(tm.VL_seconds)),2);
 		lcd0()->printf("%02d:%02d:%02d",positionhour,rtc.bcd2dec(tm.minutes),rtc.bcd2dec(tm.VL_seconds));
 	break;
 	// MENU 2
@@ -590,7 +582,7 @@ switch(Menu){
 switch(signal)
 {
 	case 1:
-		lcd0()->gotoxy(2,0);
+		lcd0()->gotoxy(3,0);
 		lcd0()->printf("count: %d\n", count);
 		signal = 0;
 	break;

@@ -1,9 +1,9 @@
 /*************************************************************************
 	ATMEGA128TIMER0
-Author:   <sergio.salazar.santos@gmail.com>
-License:  GNU General Public License
-Hardware: Atmega128 by ETT ET-BASE
-Date:     14/07/2025
+@Author:   <sergio.salazar.santos@gmail.com>
+@License:  GNU General Public License
+@Hardware: Atmega128 by ETT ET-BASE
+@Date:     14/07/2025
 *************************************************************************/
 /*** Library ***/
 #include "atmega128timer0.h"

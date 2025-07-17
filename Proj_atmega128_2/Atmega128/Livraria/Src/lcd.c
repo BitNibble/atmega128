@@ -285,7 +285,7 @@ int lcd0_putchar(char c, FILE *stream) {
 	return 0;
 }
 
-// LCD 1
+/*** Handler ***/
 void lcd1_enable(volatile uint8_t *ddr, volatile uint8_t *pin, volatile uint8_t *port)
 {
 	// import parameters
@@ -305,6 +305,7 @@ void lcd1_enable(volatile uint8_t *ddr, volatile uint8_t *pin, volatile uint8_t 
 
 LCD1_Handler* lcd1(void){ return &lcd1_setup; }
 
+/*** Procedure & Function definition ***/
 void LCD1_inic(void)
 {
 	// LCD INIC

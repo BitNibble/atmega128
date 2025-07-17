@@ -15,7 +15,7 @@ Date:     07/01/2024
 static BUFF_Handler rx1buff;
 static UARTvar UART1_Rx;
 static UARTvar UART1_RxBuf[UART1_RX_BUFFER_SIZE] = {0};
-static uint16_t uart1_rx_buffer_size = UART1_RX_BUFFER_SIZE - 1;
+static const uint16_t uart1_rx_buffer_size = UART1_RX_BUFFER_SIZE - 1;
 static uint8_t UART1_LastRxError;
 static uint8_t uart1flag;
 
@@ -28,15 +28,15 @@ void uart1_write(UARTvar data);
 void uart1_putch(UARTvar c);
 void uart1_puts(UARTvar* s);
 /*** Auxiliar ***/
-uint8_t USART1ReceiveComplete(void);
-uint8_t USART1TransmitComplete(void);
-uint8_t USART1DataRegisterEmpty(void);
-uint8_t USART1FrameError(void);
-uint8_t USART1DataOverRun(void);
-uint8_t USART1ParityError(void);
-uint8_t USART1ReadErrors(void);
-void USART1ClearErrors(void);
-void USART1DoubleTransmissionSpeed(void);
+uint8_t USART1_ReceiveComplete(void);
+uint8_t USART1_TransmitComplete(void);
+uint8_t USART1_DataRegisterEmpty(void);
+uint8_t USART1_FrameError(void);
+uint8_t USART1_DataOverRun(void);
+uint8_t USART1_ParityError(void);
+uint8_t USART1_ReadErrors(void);
+void USART1_ClearErrors(void);
+void USART1_DoubleTransmissionSpeed(void);
 
 /*** Internal State ***/
 static USART1_Handler atmega128_usart1 = {
@@ -55,11 +55,11 @@ void usart1_enable( uint32_t baud, unsigned int FDbits, unsigned int Stopbits, u
 {
 	uart1flag = 1;
 	uint16_t ubrr = 0;
-	rx1buff = buff_enable( uart1_rx_buffer_size, UART1_RxBuf );
+	rx1buff = buff_enable( UART1_RX_BUFFER_SIZE, UART1_RxBuf );
 	ubrr = BAUDRATEnormal(baud);
 	// Set baud rate
 	if ( ubrr & 0x8000 ) {
-		USART1DoubleTransmissionSpeed(); // Enable 2x speed
+		USART1_DoubleTransmissionSpeed(); // Enable 2x speed
 		ubrr = BAUDRATEdouble(baud);
 	}
 	usart1_reg()->ubrr1h.var = writeHLbyte(ubrr).par.h.var;
@@ -157,7 +157,7 @@ void uart1_write(UARTvar data)
 	uint16_t timeout;
 	usart1_reg()->ucsr1b.var |= 1 << UDRIE1;
 	usart1_reg()->udr1.var = data;
-	for( timeout = 600; !USART1DataRegisterEmpty() && timeout; timeout-- ); // minimum -> +/- 450
+	for( timeout = 600; !USART1_DataRegisterEmpty() && timeout; timeout-- ); // minimum -> +/- 450
 	//for( ; !USART1DataRegisterEmpty(); ); // without timeout
 }
 void uart1_putch(UARTvar c)
@@ -190,39 +190,39 @@ char* usart1_messageprint(USART1_Handler* uart, char* oneshot, char* msg, const 
 	return ptr;
 }
 /*** Auxiliar ***/
-uint8_t USART1ReceiveComplete(void)
+uint8_t USART1_ReceiveComplete(void)
 {
 	return (UCSR1A & (1 << RXC1));
 }
-uint8_t USART1TransmitComplete(void)
+uint8_t USART1_TransmitComplete(void)
 {
 	return (UCSR1A & (1 << TXC1));
 }
-uint8_t USART1DataRegisterEmpty(void)
+uint8_t USART1_DataRegisterEmpty(void)
 {
 	return (UCSR1A & (1 << UDRE1));
 }
-uint8_t USART1FrameError(void)
+uint8_t USART1_FrameError(void)
 {
 	return (UCSR1A & (1 << FE1));
 }
-uint8_t USART1DataOverRun(void)
+uint8_t USART1_DataOverRun(void)
 {
 	return (UCSR1A & (1 << DOR1));
 }
-uint8_t USART1ParityError(void)
+uint8_t USART1_ParityError(void)
 {
 	return (UCSR1A & (1 << FE1));
 }
-uint8_t USART1ReadErrors(void)
+uint8_t USART1_ReadErrors(void)
 {
 	return get_reg_block(UCSR1A,3,2);
 }
-void USART1ClearErrors(void)
+void USART1_ClearErrors(void)
 {
 	set_reg_block(&UCSR1A,3,2,0);
 }
-void USART1DoubleTransmissionSpeed(void)
+void USART1_DoubleTransmissionSpeed(void)
 {
 	set_reg_block(&UCSR1A,4,1,1);
 }
@@ -232,7 +232,7 @@ SIGNAL(UART1_RECEIVE_INTERRUPT)
 	unsigned char bit9;
 	unsigned char usr;
 	
-	usr  = USART1ReadErrors();
+	usr  = USART1_ReadErrors();
 	bit9 = usart1_reg()->ucsr1b.var;
 	bit9 = 0x01 & (bit9 >> 1);
 	

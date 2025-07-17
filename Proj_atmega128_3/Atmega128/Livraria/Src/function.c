@@ -3,7 +3,7 @@
 Author:   <sergio.salazar.santos@gmail.com> 
 License:  GNU General Public License
 Hardware: all
-Date :  07012024
+Date :    07012024
 *************************************************************************/
 /*** File Library ***/
 #include "function.h"
@@ -13,54 +13,56 @@ Date :  07012024
 #include <stdarg.h>
 #include <math.h>
 
-static char FUNCstr[FUNCSTRSIZE + 1] = {0};
+static char function_str[FUNC_STRSIZE + 1] = {0};
 
 /*** Procedure and Function declaration ***/
 int StringLength (const char string[]);
 void Reverse(char s[]);
-uint8_t FUNCintinvstr(uint32_t num, uint8_t index);
+uint8_t function_intinvstr(uint32_t num, uint8_t index);
 uint8_t function_fPartStr(double num, uint8_t index, uint8_t afterpoint);
-void FUNC_swap(long *px, long *py);
+void function__swap(long *px, long *py);
 /***/
 uint8_t  bintobcd(uint8_t bin);
 uint8_t leap_year_check(uint16_t year);
-unsigned int FUNCmayia(unsigned int xi, unsigned int xf, uint8_t nbits);
-void FUNCcopy(char to[], char from[]);
-void FUNCsqueeze(char s[], int c);
-void FUNCshellsort(int v[], int n);
-char* FUNCi16toa(int16_t n);
-char* FUNCui16toa(uint16_t n);
-char* FUNCi32toa(int32_t n);
-char* FUNCui32toa(uint32_t n);
-int FUNCtrim(char s[]);
-int FUNCpmax(int a1, int a2);
-int FUNCgcd (int u, int v);
-int FUNCstrToInt (const char string[]);
-int FUNCtwocomptoint8bit(int twoscomp);
-int FUNCtwocomptoint10bit(int twoscomp);
-int FUNCtwocomptointnbit(int twoscomp, uint8_t nbits);
-char FUNCdec2bcd(char num);
-char FUNCbcd2dec(char num);
-char* FUNCresizestr(char *string, int size);
-long FUNCtrimmer(long x, long in_min, long in_max, long out_min, long out_max);
-unsigned char FUNCbcd2bin(unsigned char val);
-unsigned char FUNCbin2bcd(unsigned val);
-long FUNCgcd1(long a, long b);
-char* FUNCprint_binary(unsigned int n_bits, unsigned int number);
-void FUNCreverse(char* str, int len);
-char* FUNCftoa(double num, uint8_t afterpoint);
-char* FUNCdectohex(int32_t num);
-uint16_t FUNCSwapByte(uint16_t num);
-char* FUNCprint(const char *format, ... );
-void FUNCstrtovec(char* pos, const char* str);
+unsigned int function_mayia(unsigned int xi, unsigned int xf, uint8_t nbits);
+void function_copy(char to[], char from[]);
+void function_squeeze(char s[], int c);
+void function_shellsort(int v[], int n);
+char* function_i16toa(int16_t n);
+char* function_ui16toa(uint16_t n);
+char* function_i32toa(int32_t n);
+char* function_ui32toa(uint32_t n);
+int function_trim(char s[]);
+int function_pmax(int a1, int a2);
+int function_gcd (int u, int v);
+int function_strToInt (const char string[]);
+int function_twocomptoint8bit(int twoscomp);
+int function_twocomptoint10bit(int twoscomp);
+int function_twocomptointnbit(int twoscomp, uint8_t nbits);
+char function_dec2bcd(char num);
+char function_bcd2dec(char num);
+char* function_resizestr(char *string, int size);
+long function_trimmer(long x, long in_min, long in_max, long out_min, long out_max);
+unsigned char function_bcd2bin(unsigned char val);
+unsigned char function_bin2bcd(unsigned val);
+long function_gcd1(long a, long b);
+char* function_print_binary(unsigned int n_bits, unsigned int number);
+void function_reverse(char* str, int len);
+char* function_ftoa(double num, uint8_t afterpoint);
+char* function_dectohex(int32_t num);
+uint16_t function_SwapByte(uint16_t num);
+char* function_print(const char *format, ... );
+void function_strtovec(char* pos, const char* str);
+int function_strtotok(char* line, char* token[], const char* parser);
+void function_rmcrnl(char* str);
 /************ pc use ************
-char* FUNCfltos(FILE* stream);
-char* FUNCftos(FILE* stream);
-int FUNCstrtotok(char* line,char* token[], const char* parser);
-char* FUNCputstr(char* str);
-int FUNCgetnum(char* x);
-unsigned int FUNCgetnumv2(char* x);
-int FUNCreadint(int nmin, int nmax);
+char* function_fltos(FILE* stream);
+char* function_ftos(FILE* stream);
+int function_strtotok(char* line,char* token[], const char* parser);
+char* function_putstr(char* str);
+int function_getnum(char* x);
+unsigned int function_getnumv2(char* x);
+int function_readint(int nmin, int nmax);
 ******************************/
 
 /*** Internal State ***/
@@ -68,43 +70,45 @@ static FUNC_Handler setup_func = {
 	// V-table
 	.stringlength = StringLength,
 	.reverse = Reverse,
-	.mayia = FUNCmayia,
-	.swap = FUNC_swap,
-	.copy = FUNCcopy,
-	.squeeze = FUNCsqueeze,
-	.shellsort = FUNCshellsort,
-	.i16toa = FUNCi16toa,
-	.ui16toa = FUNCui16toa,
-	.i32toa = FUNCi32toa,
-	.ui32toa = FUNCui32toa,
-	.trim = FUNCtrim,
-	.pmax = FUNCpmax,
-	.gcd = FUNCgcd,
-	.strToInt = FUNCstrToInt,
-	.twocomptoint8bit = FUNCtwocomptoint8bit,
-	.twocomptoint10bit = FUNCtwocomptoint10bit,
-	.twocomptointnbit = FUNCtwocomptointnbit,
-	.dec2bcd = FUNCdec2bcd,
-	.bcd2dec = FUNCbcd2dec,
-	.resizestr = FUNCresizestr,
-	.trimmer = FUNCtrimmer,
-	.bcd2bin = FUNCbcd2bin,
-	.bin2bcd = FUNCbin2bcd,
-	.gcd1 = FUNCgcd1,
-	.print_binary = FUNCprint_binary,
-	.ftoa = FUNCftoa,
-	.dectohex = FUNCdectohex,
-	.SwapByte = FUNCSwapByte,
-	.print = FUNCprint,
-	.strtovec = FUNCstrtovec
+	.mayia = function_mayia,
+	.swap = function__swap,
+	.copy = function_copy,
+	.squeeze = function_squeeze,
+	.shellsort = function_shellsort,
+	.i16toa = function_i16toa,
+	.ui16toa = function_ui16toa,
+	.i32toa = function_i32toa,
+	.ui32toa = function_ui32toa,
+	.trim = function_trim,
+	.pmax = function_pmax,
+	.gcd = function_gcd,
+	.strToInt = function_strToInt,
+	.twocomptoint8bit = function_twocomptoint8bit,
+	.twocomptoint10bit = function_twocomptoint10bit,
+	.twocomptointnbit = function_twocomptointnbit,
+	.dec2bcd = function_dec2bcd,
+	.bcd2dec = function_bcd2dec,
+	.resizestr = function_resizestr,
+	.trimmer = function_trimmer,
+	.bcd2bin = function_bcd2bin,
+	.bin2bcd = function_bin2bcd,
+	.gcd1 = function_gcd1,
+	.print_binary = function_print_binary,
+	.ftoa = function_ftoa,
+	.dectohex = function_dectohex,
+	.SwapByte = function_SwapByte,
+	.print = function_print,
+	.strtovec = function_strtovec,
+	.strtotok = function_strtotok,
+	.rmcrnl = function_rmcrnl
 	/***********pc use************
-	.fltos = FUNCfltos,
-	.ftos = FUNCftos,
-	.strtotok = FUNCstrtotok,
-	.putstr = FUNCputstr,
-	.getnum = FUNCgetnum,
-	.getnumv2 = FUNCgetnumv2,
-	.readint = FUNCreadint
+	.fltos = function_fltos,
+	.ftos = function_ftos,
+	.strtotok = function_strtotok,
+	.putstr = function_putstr,
+	.getnum = function_getnum,
+	.getnumv2 = function_getnumv2,
+	.readint = function_readint
 	*****************************/
 };
 
@@ -112,7 +116,7 @@ static FUNC_Handler setup_func = {
 FUNC_Handler* func(void){ return &setup_func; }
 
 /*** Procedure and Function definition ***/
-unsigned int FUNCmayia(unsigned int xi, unsigned int xf, uint8_t nbits)
+unsigned int function_mayia(unsigned int xi, unsigned int xf, uint8_t nbits)
 {
 	unsigned int diff;
 	unsigned int trans;
@@ -121,18 +125,18 @@ unsigned int FUNCmayia(unsigned int xi, unsigned int xf, uint8_t nbits)
 	return (trans << nbits) | diff;
 }
 // interchange *px and *py
-void FUNC_swap(long *px, long *py)
+void function__swap(long *px, long *py)
 {
 	long temp = *px; *px = *py; *py = temp;
 }
 // copy: copy 'from' into 'to'; assume to is big enough
-void FUNCcopy(char to[], char from[])
+void function_copy(char to[], char from[])
 {
 	int i = 0;
 	while ((to[i] = from[i]) != '\0') ++i;
 }
 // squeeze: delete all c from s
-void FUNCsqueeze(char s[], int c)
+void function_squeeze(char s[], int c)
 {
 	int i, j;
 	for (i = 0, j = 0; (s[i] != '\0'); i++){
@@ -141,7 +145,7 @@ void FUNCsqueeze(char s[], int c)
 	s[j] = '\0';
 }
 // shellsort: sort v[0]...v[n-1] into increasing order
-void FUNCshellsort(int v[], int n)
+void function_shellsort(int v[], int n)
 {
 	int gap, i, j, temp;
 	for (gap = n / 2; gap > 0; gap /= 2)
@@ -151,55 +155,55 @@ void FUNCshellsort(int v[], int n)
 			}
 }
 // ui32toa: convert n to characters in s
-char* FUNCui32toa(uint32_t n)
+char* function_ui32toa(uint32_t n)
 {
 	uint8_t i;
-	for(i = 0, FUNCstr[i++] = n % 10 + '0'; (n /= 10) > 0; FUNCstr[i++] = n % 10 + '0');
-	FUNCstr[i] = '\0';
-	Reverse(FUNCstr);
-	return FUNCstr;
+	for(i = 0, function_str[i++] = n % 10 + '0'; (n /= 10) > 0; function_str[i++] = n % 10 + '0');
+	function_str[i] = '\0';
+	Reverse(function_str);
+	return function_str;
 }
 // i32toa: convert n to characters in s
-char* FUNCi32toa(int32_t n)
+char* function_i32toa(int32_t n)
 {
 	uint8_t i;
 	int32_t sign;
 	if ((sign = n) < 0) n = -n;
 	i = 0;
 	do {
-		FUNCstr[i++] = (char) (n % 10 + '0');
+		function_str[i++] = (char) (n % 10 + '0');
 	}while ((n /= 10) > 0);
-	if (sign < 0) FUNCstr[i++] = '-';
-	FUNCstr[i] = '\0';
-	Reverse(FUNCstr);
-	return FUNCstr;
+	if (sign < 0) function_str[i++] = '-';
+	function_str[i] = '\0';
+	Reverse(function_str);
+	return function_str;
 }
 // i16toa: convert n to characters in s
-char* FUNCi16toa(int16_t n)
+char* function_i16toa(int16_t n)
 {
 	uint8_t i;
 	int16_t sign;
 	if ((sign = n) < 0) n = -n;
 	i = 0;
 	do {
-		FUNCstr[i++] = (char) (n % 10 + '0');
+		function_str[i++] = (char) (n % 10 + '0');
 	}while ((n /= 10) > 0);
-	if (sign < 0) FUNCstr[i++] = '-';
-	FUNCstr[i] = '\0';
-	Reverse(FUNCstr);
-	return FUNCstr;
+	if (sign < 0) function_str[i++] = '-';
+	function_str[i] = '\0';
+	Reverse(function_str);
+	return function_str;
 }
 // ui16toa: convert n to characters in s
-char* FUNCui16toa(uint16_t n)
+char* function_ui16toa(uint16_t n)
 {
 	uint8_t i;
-	for(i = 0, FUNCstr[i++] = n % 10 + '0'; (n /= 10) > 0; FUNCstr[i++] = n % 10 + '0');
-	FUNCstr[i] = '\0';
-	Reverse(FUNCstr);
-	return FUNCstr;
+	for(i = 0, function_str[i++] = n % 10 + '0'; (n /= 10) > 0; function_str[i++] = n % 10 + '0');
+	function_str[i] = '\0';
+	Reverse(function_str);
+	return function_str;
 }
 // trim: remove trailing blanks, tabs, newlines
-int FUNCtrim(char s[])
+int function_trim(char s[])
 {
 	int n;
 	for (n = StringLength(s) - 1; n >= 0; n--)
@@ -208,14 +212,14 @@ int FUNCtrim(char s[])
 	return n;
 }
 // larger number of two
-int FUNCpmax(int a1, int a2)
+int function_pmax(int a1, int a2)
 {
 	int biggest;
 	if(a1 > a2){ biggest = a1; }else{ biggest = a2; }
 	return biggest;
 }
 // common divisor
-int FUNCgcd (int u, int v)
+int function_gcd (int u, int v)
 {
 	int temp;
 	while ( v != 0 ) {
@@ -226,7 +230,7 @@ int FUNCgcd (int u, int v)
 long function_gcd_v2(long a, long b)
 {
 	long r;
-	if (a < b) FUNC_swap(&a, &b);
+	if (a < b) function__swap(&a, &b);
 	if (!b){
 		while ((r = a % b) != 0) {
 			a = b; b = r;
@@ -235,7 +239,7 @@ long function_gcd_v2(long a, long b)
 	return b;
 }
 // Function to convert a string to an integer
-int FUNCstrToInt (const char string[])
+int function_strToInt (const char string[])
 {
 	int i, intValue, result = 0;
 	for ( i = 0; string[i] >= '0' && string[i] <= '9'; ++i ){
@@ -245,7 +249,7 @@ int FUNCstrToInt (const char string[])
 	return result;
 }
 // Two's Complement function
-int FUNCtwocomptoint8bit(int twoscomp){
+int function_twocomptoint8bit(int twoscomp){
   
   int value;
 	// Let's see if the byte is negative
@@ -266,7 +270,7 @@ int FUNCtwocomptoint8bit(int twoscomp){
   }
 }
 // Two's Complement function, shifts 10 bit binary to signed integers (-512 to 512)
-int FUNCtwocomptoint10bit(int twoscomp){
+int function_twocomptoint10bit(int twoscomp){
 	int value;
   // Let's see if the byte is negative
   if (twoscomp & 0x200){
@@ -287,7 +291,7 @@ int FUNCtwocomptoint10bit(int twoscomp){
   }
 }
 // Two's Complement function, nbits
-int FUNCtwocomptointnbit(int twoscomp, uint8_t nbits){
+int function_twocomptointnbit(int twoscomp, uint8_t nbits){
   unsigned int signmask;
   unsigned int mask;
   signmask = (1 << (nbits - 1));
@@ -302,31 +306,31 @@ int FUNCtwocomptointnbit(int twoscomp, uint8_t nbits){
   return twoscomp;
 }
 // Convert Decimal to Binary Coded Decimal (BCD)
-char FUNCdec2bcd(char num)
+char function_dec2bcd(char num)
 {
 	return ((num / 10 * 16) + (num % 10));
 }
 // Convert Binary Coded Decimal (BCD) to Decimal
-char FUNCbcd2dec(char num)
+char function_bcd2dec(char num)
 {
 	return ((num / 16 * 10) + (num % 16));
 }
 // resizestr
-char* FUNCresizestr(char *string, int size)
+char* function_resizestr(char *string, int size)
 {
 	int i;
-	FUNCstr[size] = '\0';
+	function_str[size] = '\0';
 	for(i = 0; i < size; i++){
 		if(*(string + i) == '\0'){
-			for(; i < size; i++){ FUNCstr[i] = ' '; }
+			for(; i < size; i++){ function_str[i] = ' '; }
 			break;
 		}
-		FUNCstr[i] = *(string + i);
+		function_str[i] = *(string + i);
 	}
-	return FUNCstr;
+	return function_str;
 }
 // trimmer
-long FUNCtrimmer(long x, long in_min, long in_max, long out_min, long out_max)
+long function_trimmer(long x, long in_min, long in_max, long out_min, long out_max)
 // same as arduino map function.
 {
 	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
@@ -347,20 +351,20 @@ void Reverse(char s[])
 	}
 }
 // bcd2bin
-unsigned char FUNCbcd2bin(unsigned char val)
+unsigned char function_bcd2bin(unsigned char val)
 {
 	return (val & 0x0f) + (val >> 4) * 10;
 }
 // bin2bcd
-unsigned char FUNCbin2bcd(unsigned int val)
+unsigned char function_bin2bcd(unsigned int val)
 {
 	return (unsigned char)(((val / 10) << 4) + val % 10);
 }
 // gcd1
-long FUNCgcd1(long a, long b)
+long function_gcd1(long a, long b)
 {
 	long r;
-	if (a < b) FUNC_swap(&a, &b);
+	if (a < b) function__swap(&a, &b);
 	if (!b){
 		while ((r = a % b) != 0) {
 			a = b; b = r;
@@ -369,13 +373,13 @@ long FUNCgcd1(long a, long b)
 	return b;
 }
 // printbinary
-char* FUNCprint_binary(unsigned int n_bits, unsigned int number)
+char* function_print_binary(unsigned int n_bits, unsigned int number)
 {
 	unsigned int i, c;
 	for(i = (1 << (n_bits - 1)), c = 0; i; i >>= 1, c++)
-		(number & i) ? (FUNCstr[c] = '1') : (FUNCstr[c] = '0');
-	FUNCstr[c] = '\0';
-	return FUNCstr;
+		(number & i) ? (function_str[c] = '1') : (function_str[c] = '0');
+	function_str[c] = '\0';
+	return function_str;
 }
 // leapyearcheck
 uint8_t leap_year_check(uint16_t year){
@@ -392,42 +396,42 @@ uint8_t bintobcd(uint8_t bin)
 	return (uint8_t)((((bin) / 10) << 4) + ((bin) % 10));
 }
 // intinvstr
-uint8_t FUNCintinvstr(uint32_t num, uint8_t index)
+uint8_t function_intinvstr(uint32_t num, uint8_t index)
 {
-	for(FUNCstr[index++] = (char)((num % 10) + '0'); (num /= 10) > 0 ; FUNCstr[index++] = (char)((num % 10) + '0'));
-	FUNCstr[index] = '\0'; return index;
+	for(function_str[index++] = (char)((num % 10) + '0'); (num /= 10) > 0 ; function_str[index++] = (char)((num % 10) + '0'));
+	function_str[index] = '\0'; return index;
 }
 // fPartStr
 uint8_t function_fPartStr(double num, uint8_t index, uint8_t afterpoint)
 {
-	for( num *= 10; afterpoint ; FUNCstr[index++] = (uint8_t)(num + '0'), num -= (uint8_t)num, num *= 10, afterpoint--);
-	FUNCstr[index] = '\0'; return index;
+	for( num *= 10; afterpoint ; function_str[index++] = (uint8_t)(num + '0'), num -= (uint8_t)num, num *= 10, afterpoint--);
+	function_str[index] = '\0'; return index;
 }
 // ftoa
-char* FUNCftoa(double num, uint8_t afterpoint)
+char* function_ftoa(double num, uint8_t afterpoint)
 {
 	uint32_t ipart; double n, fpart; uint8_t k = 0; int8_t sign;
 	if (num < 0){ n = -num; sign = -1;}else{n = num; sign = 1;}
 	ipart = (uint32_t) n; fpart = n - (double)ipart;
-	k = FUNCintinvstr(ipart, 0); if (sign < 0) FUNCstr[k++] = '-'; FUNCstr[k] = '\0'; Reverse(FUNCstr);
-	FUNCstr[k++] = '.';
+	k = function_intinvstr(ipart, 0); if (sign < 0) function_str[k++] = '-'; function_str[k] = '\0'; Reverse(function_str);
+	function_str[k++] = '.';
 	function_fPartStr(fpart, k, afterpoint);
-	return FUNCstr;
+	return function_str;
 }
 // dectohex
-char* FUNCdectohex(int32_t num)
+char* function_dectohex(int32_t num)
 {
 	int32_t remainder; uint8_t j;
-	for(j = 0, FUNCstr[j] = '\0'; num; FUNCstr[j] = '\0', num = num / 16){
+	for(j = 0, function_str[j] = '\0'; num; function_str[j] = '\0', num = num / 16){
 		remainder = num % 16;
-		if (remainder < 10) FUNCstr[j++] = (char) (48 + remainder);
-		else FUNCstr[j++] = (char) (55 + remainder);
+		if (remainder < 10) function_str[j++] = (char) (48 + remainder);
+		else function_str[j++] = (char) (55 + remainder);
 	}
-	Reverse(FUNCstr);
-	return FUNCstr;
+	Reverse(function_str);
+	return function_str;
 }
 // swapbyte
-uint16_t FUNCSwapByte(uint16_t num)
+uint16_t function_SwapByte(uint16_t num)
 {
 	uint16_t tp;
 	tp = (uint16_t)(num << 8);
@@ -443,19 +447,39 @@ char* function_print_v1( char* str, uint8_t size_str, const char* format, ... )
 	if(ret < 0){ return NULL; }else return str;
 }
 // print
-char* FUNCprint( const char* format, ... )
+char* function_print( const char* format, ... )
 {
 	va_list aptr; int ret;
 	va_start(aptr, format);
-	ret = vsnprintf( FUNCstr, FUNCSTRSIZE, (const char*) format, aptr );
-	// ret = vsnprintf( ptr, FUNCSTRSIZE, format, aptr );
+	ret = vsnprintf( function_str, FUNC_STRSIZE, (const char*) format, aptr );
+	// ret = vsnprintf( ptr, function_STRSIZE, format, aptr );
 	va_end(aptr);
-	if(ret < 0){ return NULL; }else return FUNCstr;
+	if(ret < 0){ return NULL; }else return function_str;
 }
 // strtovec
-void FUNCstrtovec(char* pos, const char* str){
+void function_strtovec(char* pos, const char* str){
 	int i;
 	for(i=0; str[i]; *(pos + i) = str[i], i++);
+}
+
+int function_strtotok(char* line, char* token[], const char* parser)
+{
+    int i;
+    for (i = 0, token[i] = strtok(line, parser); token[i]; i++, token[i] = strtok(NULL, parser));
+    return i;
+}
+
+void function_rmcrnl(char* str)
+{
+	if (!str) return; 
+    int len = (int)strlen(str) - 1;
+	if(len > 1){
+		for (int stop = len - 2; len > stop; len--) {
+			if (*(str + len) == '\r' || *(str + len) == '\n') {
+				*(str + len) = '\0';
+			}
+		}
+	}else{*str = '\0';}
 }
 /********************************************************************
 int gcd( int a, int b ) {
@@ -518,7 +542,7 @@ float square_root( float val ) {
 }
 */
 /***pc use***
-char* FUNCfltos(FILE* stream)
+char* function_fltos(FILE* stream)
 {
 	int i, block, NBytes;
 	char caracter;
@@ -540,7 +564,7 @@ char* FUNCfltos(FILE* stream)
 	}
 	return value;
 }
-char* FUNCftos(FILE* stream)
+char* function_ftos(FILE* stream)
 {
 	int i, block, NBytes;
 	char caracter;
@@ -558,7 +582,7 @@ char* FUNCftos(FILE* stream)
 	}
 	return value;
 }
-int FUNCstrtotok(char* line, char* token[], const char* parser)
+int function_strtotok(char* line, char* token[], const char* parser)
 {
 	int i;
 	char *str;
@@ -572,7 +596,7 @@ int FUNCstrtotok(char* line, char* token[], const char* parser)
 	free(str);
 	return i;
 }
-char* FUNCputstr(char* str)
+char* function_putstr(char* str)
 {
 	int i; char* ptr;
 	ptr = (char*)calloc(strlen(str), sizeof(char));
@@ -586,14 +610,14 @@ char* FUNCputstr(char* str)
 	}
 	return (ptr);
 }
-int FUNCgetnum(char* x)
+int function_getnum(char* x)
 {
 	int num;
 	if(!sscanf(x, "%d", &num))
 		num = 0;
 	return num;
 }
-unsigned int FUNCgetnumv2(char* x)
+unsigned int function_getnumv2(char* x)
 {
 	unsigned int RETURN;
 	unsigned int value;
@@ -610,7 +634,7 @@ unsigned int FUNCgetnumv2(char* x)
 	}
 	return RETURN;
 }
-int FUNCreadint(int nmin, int nmax)
+int function_readint(int nmin, int nmax)
 {
 	int num;
 	int flag;

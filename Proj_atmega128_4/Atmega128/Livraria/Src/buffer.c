@@ -3,7 +3,7 @@
 Author:   <sergio.salazar.santos@gmail.com>
 License:  GNU General Public License
 Hardware: all
-Date:     17112022
+Date:     17072025
 ******************************************************************************/
 /*** Library ***/
 #include "buffer.h"
@@ -23,7 +23,7 @@ BUFF_Handler buff_enable( uint16_t size_buff, BUFFvar* buff )
 	// inic VAR
 	setup_buffer.par.orig = buff;
 	setup_buffer.par.head = buff;
-	setup_buffer.par.end = buff + ( size_buff ); // generic
+	setup_buffer.par.end = buff + ( size_buff - 1 ); // generic
 	// V-table
 	setup_buffer.push = BUFF_push;
 	setup_buffer.raw = BUFF_raw;
@@ -36,21 +36,19 @@ BUFF_Handler buff_enable( uint16_t size_buff, BUFFvar* buff )
 void BUFF_push( BUFF_Parameter* par, BUFFvar data ){
 	BUFFvar* head; BUFFvar* next;
 	head = par->head;
-	if(data){
-		if( head == par->end ){
-			head = par->orig;
-			next = head + 1;
-		}else{
-			next = head + 1;
-		}
-			*head = data;
-			*next = 0;
-			par->head = next;
+	if( par->end - head ){
+		next = head + 1;
+	}else{
+		head = par->orig;
+		next = head + 1;
 	}
+	*head = data;
+	par->head = next;
 }
 
 BUFFvar* BUFF_raw( BUFF_Parameter* par ){
-		return par->orig;
+	*par->head = 0;
+	return par->orig;
 }
 
 void BUFF_flush( BUFF_Parameter* par ){
@@ -60,5 +58,5 @@ void BUFF_flush( BUFF_Parameter* par ){
 	*head = 0;
 }
 
-/***EOF***/
+/*** EOF ***/
 

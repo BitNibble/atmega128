@@ -64,6 +64,8 @@ Livraria\Src\pcf8575.c
 
 Livraria\Src\pcf8575lcd.c
 
+Livraria\Src\ringbuffer.c
+
 Livraria\Src\rotenc.c
 
 Livraria\Src\watch.c

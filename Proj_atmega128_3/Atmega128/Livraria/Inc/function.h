@@ -3,7 +3,7 @@
 Author:   <sergio.salazar.santos@gmail.com>
 License:  GNU General Public License
 Hardware: all
-Date:   07012024
+Date:     07012024
 ************************************************************************/
 #ifndef _FUNCTION_H_
 	#define _FUNCTION_H_
@@ -19,7 +19,7 @@ Date:   07012024
 #include <inttypes.h>
 
 /*** Constant & Macro ***/
-#define FUNCSTRSIZE 31
+#define FUNC_STRSIZE 31
 
 /*** Handler ***/
 typedef struct
@@ -56,6 +56,8 @@ typedef struct
 	uint16_t (*SwapByte)(uint16_t num);
 	char* (*print)( const char *format, ... );
 	void (*strtovec)(char* pos, const char* str);
+	int (*strtotok)(char* line, char* token[], const char* parser);
+	void (*rmcrnl)(char* str);
 	/**********************pc use**********************
 	char* (*fltos)(FILE* stream);
 	char* (*ftos)(FILE* stream);
