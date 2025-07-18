@@ -9,6 +9,8 @@
 #include "atmega128timer0.h"
 
 /*** Procedure and Function declaration ***/
+void TIMER_COUNTER0_wavegenmode(unsigned char wavegenmode);
+void TIMER_COUNTER0_interrupt(unsigned char interrupt);
 void TIMER_COUNTER0_compoutmode(unsigned char compoutmode);
 void TIMER_COUNTER0_compare(unsigned char compare);
 uint8_t TIMER_COUNTER0_start(unsigned int prescaler);
@@ -22,6 +24,8 @@ static TC0_Handler atmega128_tc0 = {
 		.ovf_vect = NULL
 	},
 	// V-table
+	.wavegenmode = TIMER_COUNTER0_wavegenmode,
+	.interrupt = TIMER_COUNTER0_interrupt,
 	.compoutmode = TIMER_COUNTER0_compoutmode,
 	.compare = TIMER_COUNTER0_compare,
 	.start = TIMER_COUNTER0_start,
@@ -36,7 +40,20 @@ void tc0_enable(unsigned char wavegenmode, unsigned char interrupt)
 // interrupt: off; overflow; output compare; both; default - off.
 {
 	timer0_state = 0;
+	
+	TIMER_COUNTER0_wavegenmode(wavegenmode);
+	TIMER_COUNTER0_interrupt(interrupt);
+	
+	tc0_reg()->ocr0.var = ~0;
+}
 
+TC0_Handler* tc0(void) {
+	return &atmega128_tc0;
+}
+
+/*** Procedure and Function definition ***/
+void TIMER_COUNTER0_wavegenmode(unsigned char wavegenmode)
+{
 	// Clear WGM01:WGM00
 	tc0_reg()->tccr0.var &= ~((1 << WGM00) | (1 << WGM01));
 
@@ -54,8 +71,11 @@ void tc0_enable(unsigned char wavegenmode, unsigned char interrupt)
 		break;
 		default:
 		break;
-	}
+	}	
+}
 
+void TIMER_COUNTER0_interrupt(unsigned char interrupt)
+{
 	// Disable interrupts first
 	tc0_reg()->timsk.var &= ~((1 << TOIE0) | (1 << OCIE0));
 
@@ -77,16 +97,8 @@ void tc0_enable(unsigned char wavegenmode, unsigned char interrupt)
 		default:
 		break;
 	}
-
-	// Set default OCR0 to 0xFF
-	tc0_reg()->ocr0.var = 0xFF;
 }
 
-TC0_Handler* tc0(void) {
-	return &atmega128_tc0;
-}
-
-/*** Procedure and Function definition ***/
 uint8_t TIMER_COUNTER0_start(unsigned int prescaler)
 // Start Timer0 with valid prescaler setting
 {

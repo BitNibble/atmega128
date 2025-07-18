@@ -9,6 +9,8 @@ Date:     14/07/2025
 #include "atmega128timer1.h"
 
 /*** Procedure and Function declaration ***/
+void TIMER_COUNTER1_wavegenmode(unsigned char wavegenmode);
+void TIMER_COUNTER1_interrupt(unsigned char interrupt);
 void TIMER_COUNTER1_compoutmodeA(unsigned char compoutmode);
 void TIMER_COUNTER1_compoutmodeB(unsigned char compoutmode);
 void TIMER_COUNTER1_compoutmodeC(unsigned char compoutmode);
@@ -29,6 +31,8 @@ static TC1_Handler atmega128_tc1 = {
 		.ovf_vect = NULL
 	},
 	// V-table
+	.wavegenmode = TIMER_COUNTER1_wavegenmode,
+	.interrupt = TIMER_COUNTER1_interrupt,
 	.compoutmodeA = TIMER_COUNTER1_compoutmodeA,
 	.compoutmodeB = TIMER_COUNTER1_compoutmodeB,
 	.compoutmodeC = TIMER_COUNTER1_compoutmodeC,
@@ -51,128 +55,9 @@ void tc1_enable(unsigned char wavegenmode, unsigned char interrupt)
 {
 	timer1_state = 0;
 	
-	tc1_reg()->tccr1a.var &= ~((1 << WGM11) | (1 << WGM10));
-	tc1_reg()->tccr1b.var &= ~((1 << WGM13) | (1 << WGM12));
-	switch(wavegenmode){ // TOP -- Update of OCRnX at -- TOV Flag Set on
-		case 0: // Normal, 0xFFFF -- Immediate -- MAX
-		break;
-		case 1: // PWM Phase Correct 8-bit, 0x00FF -- TOP -- BOTTOM
-			tc1_reg()->tccr1a.var |= (1 << WGM10);
-		break;
-		case 2:	// PWM Phase Correct 9-bit, 0x01FF -- TOP -- BOTTOM
-			tc1_reg()->tccr1a.var |= (1 << WGM11);
-		break;
-		case 3:	// PWM Phase Correct 10-bit, 0x03FF -- TOP -- BOTTOM
-			tc1_reg()->tccr1a.var |= (1 << WGM11) | (1 << WGM10);
-		break;
-		case 4:	// CTC, OCRnA Immediate MAX
-			tc1_reg()->tccr1b.var |= (1 << WGM12);
-		break;
-		case 5:	// Fast PWM 8-bit, 0x00FF -- BOTTOM -- TOP
-			tc1_reg()->tccr1a.var |= (1 << WGM10);
-			tc1_reg()->tccr1b.var |= (1 << WGM12);
-		break;
-		case 6:	// Fast PWM 9-bit, 0x01FF -- BOTTOM -- TOP
-			tc1_reg()->tccr1a.var |= (1 << WGM11);
-			tc1_reg()->tccr1b.var |= (1 << WGM12);
-		break;
-		case 7:	// Fast PWM 10-bit, 0x03FF -- BOTTOM -- TOP
-			tc1_reg()->tccr1a.var |= (1 << WGM11) | (1 << WGM10);
-			tc1_reg()->tccr1b.var |=(1 << WGM12);
-		break;
-		case 8:	// PWM Phase and Frequency Correct, ICRnA -- BOTTOM -- BOTTOM
-			tc1_reg()->tccr1b.var |= (1 << WGM13);
-		break;
-		case 9:	// PWM Phase and Frequency Correct, OCRnA -- BOTTOM -- BOTTOM
-			tc1_reg()->tccr1a.var |= (1 << WGM10);
-			tc1_reg()->tccr1b.var |= (1 << WGM13);
-		break;
-		case 10: // PWM Phase Correct, ICRn -- TOP -- BOTTOM
-			tc1_reg()->tccr1a.var |= (1 << WGM11);
-			tc1_reg()->tccr1b.var |= (1 << WGM13);
-		break;
-		case 11: // PWM Phase Correct, OCRnA -- TOP -- BOTTOM
-			tc1_reg()->tccr1a.var |= (1 << WGM11) | (1 << WGM10);
-			tc1_reg()->tccr1b.var |= (1 << WGM13);
-		break;
-		case 12: // CTC, ICRn -- Immediate -- MAX
-			tc1_reg()->tccr1b.var |= (1 << WGM13) | (1 << WGM12);
-		break;
-		case 13: // (Reserved), -- -- --
-			tc1_reg()->tccr1a.var |= (1 << WGM10);
-			tc1_reg()->tccr1b.var |= (1 << WGM13) | (1 << WGM12);
-		break;
-		case 14: // Fast PWM, ICRn -- BOTTOM -- TOP
-			tc1_reg()->tccr1a.var |= (1 << WGM11);
-			tc1_reg()->tccr1b.var |= (1 << WGM13) | (1 << WGM12);
-		break;
-		case 15: // Fast PWM, OCRnA -- BOTTOM -- TOP
-			tc1_reg()->tccr1a.var |= (1 << WGM11) | (1 << WGM10);
-			tc1_reg()->tccr1b.var |= (1 << WGM13) | (1 << WGM12);
-		break;
-		default:
-		break;
-	}
-	tc1_reg()->tccr1a.var &= ~((3 << COM1A0) | (3 << COM1B0) | (3 << COM1C0));
-	tc1_reg()->timsk.var &= ~((1 << TICIE1) | (1 << OCIE1A) | (1 << OCIE1B) | (1 << TOIE1));
-	tc1_reg()->etimsk.var &= ~(1 << OCIE1C);
-	switch(interrupt){ // ICP1  -->  PD4
-		case 0:
-		break;
-		case 1:
-			tc1_reg()->timsk.var |= (1 << TOIE1);
-			cpu_reg()->sreg.var |= 1 << 7;
-		break;
-		case 2:
-			tc1_reg()->timsk.var |= (1 << OCIE1A);
-			cpu_reg()->sreg.var |= 1 << 7;
-		break;
-		case 3:
-			tc1_reg()->timsk.var |= (1 << OCIE1B);
-			cpu_reg()->sreg.var |= 1 << 7;
-		break;
-		case 4:
-			tc1_reg()->etimsk.var |= (1 << OCIE1C);
-			cpu_reg()->sreg.var |= 1 << 7;
-		break;
-		case 5:
-			tc1_reg()->timsk.var |= (1 << TICIE1);
-			cpu_reg()->sreg.var |= 1 << 7;
-		break;
-		case 6:
-			tc1_reg()->timsk.var |= (1 << OCIE1A) | (1 << TOIE1);
-			cpu_reg()->sreg.var |= 1 << 7;
-		break;
-		case 7:
-			tc1_reg()->timsk.var |= (1 << OCIE1B) | (1 << TOIE1);
-			cpu_reg()->sreg.var |= 1 << 7;
-		break;
-		case 8:
-			tc1_reg()->timsk.var |= (1 << TOIE1);
-			tc1_reg()->etimsk.var |= (1 << OCIE1C);
-			cpu_reg()->sreg.var |= 1 << 7;
-		break;
-		case 9:
-			tc1_reg()->timsk.var |= (1 << TICIE1) | (1 << TOIE1);
-			cpu_reg()->sreg.var |= 1 << 7;
-		break;
-		case 10:
-			tc1_reg()->timsk.var |= (1 << OCIE1A) | (1 << OCIE1B) | (1 << TOIE1);
-			cpu_reg()->sreg.var |= 1 << 7;
-		break;
-		case 11:
-			tc1_reg()->timsk.var |= (1 << OCIE1A) | (1 << OCIE1B) | (1 << TOIE1);
-			tc1_reg()->etimsk.var |= (1 << OCIE1C);
-			cpu_reg()->sreg.var |= 1 << 7;
-		break;
-		case 12:
-			tc1_reg()->timsk.var |= (1 << OCIE1A) | (1 << OCIE1B);
-			tc1_reg()->etimsk.var |= (1 << OCIE1C);
-			cpu_reg()->sreg.var |= 1 << 7;
-		break;
-		default:
-		break;
-	}
+	TIMER_COUNTER1_wavegenmode(wavegenmode);
+	TIMER_COUNTER1_interrupt(interrupt);
+	
 	tc1_reg()->ocr1a = writeHLbyte(~0);
 	tc1_reg()->ocr1b = writeHLbyte(~0);
 	tc1_reg()->ocr1c = writeHLbyte(~0);
@@ -181,6 +66,136 @@ void tc1_enable(unsigned char wavegenmode, unsigned char interrupt)
 TC1_Handler* tc1(void){ return &atmega128_tc1; }
 
 /*** Procedure and Function definition ***/
+void TIMER_COUNTER1_wavegenmode(unsigned char wavegenmode)
+{
+	tc1_reg()->tccr1a.var &= ~((1 << WGM11) | (1 << WGM10));
+	tc1_reg()->tccr1b.var &= ~((1 << WGM13) | (1 << WGM12));
+	switch(wavegenmode){ // TOP -- Update of OCRnX at -- TOV Flag Set on
+		case 0: // Normal, 0xFFFF -- Immediate -- MAX
+		break;
+		case 1: // PWM Phase Correct 8-bit, 0x00FF -- TOP -- BOTTOM
+		tc1_reg()->tccr1a.var |= (1 << WGM10);
+		break;
+		case 2:	// PWM Phase Correct 9-bit, 0x01FF -- TOP -- BOTTOM
+		tc1_reg()->tccr1a.var |= (1 << WGM11);
+		break;
+		case 3:	// PWM Phase Correct 10-bit, 0x03FF -- TOP -- BOTTOM
+		tc1_reg()->tccr1a.var |= (1 << WGM11) | (1 << WGM10);
+		break;
+		case 4:	// CTC, OCRnA Immediate MAX
+		tc1_reg()->tccr1b.var |= (1 << WGM12);
+		break;
+		case 5:	// Fast PWM 8-bit, 0x00FF -- BOTTOM -- TOP
+		tc1_reg()->tccr1a.var |= (1 << WGM10);
+		tc1_reg()->tccr1b.var |= (1 << WGM12);
+		break;
+		case 6:	// Fast PWM 9-bit, 0x01FF -- BOTTOM -- TOP
+		tc1_reg()->tccr1a.var |= (1 << WGM11);
+		tc1_reg()->tccr1b.var |= (1 << WGM12);
+		break;
+		case 7:	// Fast PWM 10-bit, 0x03FF -- BOTTOM -- TOP
+		tc1_reg()->tccr1a.var |= (1 << WGM11) | (1 << WGM10);
+		tc1_reg()->tccr1b.var |=(1 << WGM12);
+		break;
+		case 8:	// PWM Phase and Frequency Correct, ICRnA -- BOTTOM -- BOTTOM
+		tc1_reg()->tccr1b.var |= (1 << WGM13);
+		break;
+		case 9:	// PWM Phase and Frequency Correct, OCRnA -- BOTTOM -- BOTTOM
+		tc1_reg()->tccr1a.var |= (1 << WGM10);
+		tc1_reg()->tccr1b.var |= (1 << WGM13);
+		break;
+		case 10: // PWM Phase Correct, ICRn -- TOP -- BOTTOM
+		tc1_reg()->tccr1a.var |= (1 << WGM11);
+		tc1_reg()->tccr1b.var |= (1 << WGM13);
+		break;
+		case 11: // PWM Phase Correct, OCRnA -- TOP -- BOTTOM
+		tc1_reg()->tccr1a.var |= (1 << WGM11) | (1 << WGM10);
+		tc1_reg()->tccr1b.var |= (1 << WGM13);
+		break;
+		case 12: // CTC, ICRn -- Immediate -- MAX
+		tc1_reg()->tccr1b.var |= (1 << WGM13) | (1 << WGM12);
+		break;
+		case 13: // (Reserved), -- -- --
+		tc1_reg()->tccr1a.var |= (1 << WGM10);
+		tc1_reg()->tccr1b.var |= (1 << WGM13) | (1 << WGM12);
+		break;
+		case 14: // Fast PWM, ICRn -- BOTTOM -- TOP
+		tc1_reg()->tccr1a.var |= (1 << WGM11);
+		tc1_reg()->tccr1b.var |= (1 << WGM13) | (1 << WGM12);
+		break;
+		case 15: // Fast PWM, OCRnA -- BOTTOM -- TOP
+		tc1_reg()->tccr1a.var |= (1 << WGM11) | (1 << WGM10);
+		tc1_reg()->tccr1b.var |= (1 << WGM13) | (1 << WGM12);
+		break;
+		default:
+		break;
+	}	
+}
+
+void TIMER_COUNTER1_interrupt(unsigned char interrupt)
+{
+	tc1_reg()->tccr1a.var &= ~((3 << COM1A0) | (3 << COM1B0) | (3 << COM1C0));
+	tc1_reg()->timsk.var &= ~((1 << TICIE1) | (1 << OCIE1A) | (1 << OCIE1B) | (1 << TOIE1));
+	tc1_reg()->etimsk.var &= ~(1 << OCIE1C);
+	switch(interrupt){ // ICP1  -->  PD4
+		case 0:
+		break;
+		case 1:
+		tc1_reg()->timsk.var |= (1 << TOIE1);
+		cpu_reg()->sreg.var |= 1 << 7;
+		break;
+		case 2:
+		tc1_reg()->timsk.var |= (1 << OCIE1A);
+		cpu_reg()->sreg.var |= 1 << 7;
+		break;
+		case 3:
+		tc1_reg()->timsk.var |= (1 << OCIE1B);
+		cpu_reg()->sreg.var |= 1 << 7;
+		break;
+		case 4:
+		tc1_reg()->etimsk.var |= (1 << OCIE1C);
+		cpu_reg()->sreg.var |= 1 << 7;
+		break;
+		case 5:
+		tc1_reg()->timsk.var |= (1 << TICIE1);
+		cpu_reg()->sreg.var |= 1 << 7;
+		break;
+		case 6:
+		tc1_reg()->timsk.var |= (1 << OCIE1A) | (1 << TOIE1);
+		cpu_reg()->sreg.var |= 1 << 7;
+		break;
+		case 7:
+		tc1_reg()->timsk.var |= (1 << OCIE1B) | (1 << TOIE1);
+		cpu_reg()->sreg.var |= 1 << 7;
+		break;
+		case 8:
+		tc1_reg()->timsk.var |= (1 << TOIE1);
+		tc1_reg()->etimsk.var |= (1 << OCIE1C);
+		cpu_reg()->sreg.var |= 1 << 7;
+		break;
+		case 9:
+		tc1_reg()->timsk.var |= (1 << TICIE1) | (1 << TOIE1);
+		cpu_reg()->sreg.var |= 1 << 7;
+		break;
+		case 10:
+		tc1_reg()->timsk.var |= (1 << OCIE1A) | (1 << OCIE1B) | (1 << TOIE1);
+		cpu_reg()->sreg.var |= 1 << 7;
+		break;
+		case 11:
+		tc1_reg()->timsk.var |= (1 << OCIE1A) | (1 << OCIE1B) | (1 << TOIE1);
+		tc1_reg()->etimsk.var |= (1 << OCIE1C);
+		cpu_reg()->sreg.var |= 1 << 7;
+		break;
+		case 12:
+		tc1_reg()->timsk.var |= (1 << OCIE1A) | (1 << OCIE1B);
+		tc1_reg()->etimsk.var |= (1 << OCIE1C);
+		cpu_reg()->sreg.var |= 1 << 7;
+		break;
+		default:
+		break;
+	}	
+}
+
 uint8_t TIMER_COUNTER1_start(unsigned int prescaler)
 // PARAMETER SETTING
 // Frequency oscillator devision factor or prescaler.

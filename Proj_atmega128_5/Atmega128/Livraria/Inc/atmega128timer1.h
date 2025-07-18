@@ -17,7 +17,7 @@ Date:     14/07/2025
 #endif
 
 #if !defined(__AVR_ATmega64__) && !defined(__AVR_ATmega128__)
-	#error "Not ATmega128"
+	#error "Not ATmega 128"
 #endif
 
 /*** Callback ***/
@@ -34,6 +34,8 @@ typedef struct {
     TC1_Callback callback;
 
     /*** V-Table ***/
+	void (*wavegenmode)(unsigned char wavegenmode);
+	void (*interrupt)(unsigned char interrupt);
     void    (*compoutmodeA)(uint8_t mode);
     void    (*compoutmodeB)(uint8_t mode);
     void    (*compoutmodeC)(uint8_t mode);

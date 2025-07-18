@@ -11,7 +11,7 @@ Date:     14/07/2025
 /*** Library ***/
 #include "atmega128.h"
 
-/*** Constant and  Macro ***/
+/*** Constant and Macro ***/
 #ifndef ATMEGA_128_TIMER_COUNTER
 	#define ATMEGA_128_TIMER_COUNTER
 #endif
@@ -31,6 +31,8 @@ typedef struct{
 	TC2_Callback callback;
 	
 	// V-table
+	void (*wavegenmode)(unsigned char wavegenmode);
+	void (*interrupt)(unsigned char interrupt);
 	void (*compoutmode)(unsigned char compoutmode);
 	void (*compare)(unsigned char compare);
 	uint8_t (*start)(unsigned int prescaler);

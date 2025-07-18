@@ -70,6 +70,7 @@ lcd02p()->printf("%02d:%02d:%02d",rtc.bcd2dec(dt.days),rtc.bcd2dec(dt.century_mo
 lcd02p()->gotoxy(1,12);
 lcd02p()->printf("%02d:%02d:%02d",rtc.bcd2dec(tm.hours),rtc.bcd2dec(tm.minutes),rtc.bcd2dec(tm.VL_seconds));	
 lcd02p()->gotoxy(3,0);
+func()->rmcrnl(uartmsgprint);
 lcd02p()->string_size(uartmsgprint,13);
 
 if(!strcmp("stop\r\n",uartmsgprint)){ l293.dir(&l293.par,0); pcf8575.writehbits(&pcf8575.par,0xFFFF,HIGH);}

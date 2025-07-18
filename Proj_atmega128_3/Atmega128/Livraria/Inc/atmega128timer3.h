@@ -34,6 +34,8 @@ typedef struct{
 	TC3_Callback callback;
 	
 	// V-table
+	void (*wavegenmode)(unsigned char wavegenmode);
+	void (*interrupt)(unsigned char interrupt);
 	void (*compoutmodeA)(unsigned char compoutmode);
 	void (*compoutmodeB)(unsigned char compoutmode);
 	void (*compoutmodeC)(unsigned char compoutmode);

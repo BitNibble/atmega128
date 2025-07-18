@@ -31,6 +31,8 @@ typedef struct {
 	TC0_Callback callback;
 
 	// V-table
+	void (*wavegenmode)(unsigned char wavegenmode);
+	void (*interrupt)(unsigned char interrupt);
 	void (*compoutmode)(unsigned char compoutmode);
 	void (*compare)(unsigned char compare);
 	uint8_t (*start)(unsigned int prescaler);
