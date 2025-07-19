@@ -7,8 +7,6 @@ Date:     17072025
 ******************************************************************************/
 /*** Library ***/
 #include "buffer.h"
-#include <stdio.h>
-#include <string.h>
 
 /*** Procedure and Function declaration ***/
 void BUFF_push(BUFF_Parameter* par, BUFFvar data);

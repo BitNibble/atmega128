@@ -1,5 +1,5 @@
 All namings must be in singular format.
-All Module related typdef structs must follow thsi naming template
+All Module related typdef structs must follow this naming template
 <ALLUPPERCASEModulename>_Handler, <ALLUPPERCASEModulename>_Parameter,
 <ALLUPPERCASEModulename>_Callback,
 that is <ALLUPPERCASEModulename>_<FIRSTLETTERUPPERCASEname>
@@ -7,4 +7,4 @@ that is <ALLUPPERCASEModulename>_<FIRSTLETTERUPPERCASEname>
 The accessor function and enable function must be all lower case 
 modulename, and modulename_enable.
 
-Fix USART0 now
+Fix USART0 now.
